@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#  obxml.py
 #
 #  Openbox Menu Editor 1.0 beta
 # 
