@@ -1,8 +1,8 @@
 ==========
-OBMENU 1.1.1
+obmenux 1.1.1
 ==========
 
-Obmenu is an Openbox menu editor, written in Python. It allows editing menus
+obmenux is an Openbox menu editor, written in Python, based on obmenu. It allows editing menus
 in an intuitive way.
 
 REQUIREMENTS:
@@ -17,10 +17,19 @@ INSTALLATION:
   <password>
   python2 setup.py install
 
-  or
+  or:
   python2 minisetup.py install
   if you don't want the pipemenus
-	
+
+  run using:
+  obmenux
+  
+  or if your openbox menu for a session isn't named menu.xml:
+  obmenux .config/openbox/your-menu-name.xml
+  
+  The installation should allow continuing to use other versions of obmenu that are not named obmenux.
+  (If it causes any interference with other versions, that would be an issue to report.)
+  
 CHANGELOG:
 
 - version 1.1.1 moving items between menus (or into or out of menus, including
