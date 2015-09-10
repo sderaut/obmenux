@@ -33,14 +33,14 @@ CHANGELOG:
 - Automatically reconfigures Openbox
 
 - Create and modify pipemenus. Pipemenus are a way of creating menus
-  dynamically. For more info, visit openbox documentation.
+  dynamically. For more info, visit Openbox documentation.
 
 - The same with "link" menus, which are references to other menus by their IDs.
   That way you can reproduce a menu in several places of your file.
 
-- Lot's of GUI enhancements
+- Lots of GUI enhancements
 
-- Multifile support (New, open, save, ..)
+- Multifile support (New, Open, Save, Save As)
 
 CREDITS:
 	
@@ -52,9 +52,9 @@ CREDITS:
 	
 	Manuel Colmenero 2005-2006
 	
-	Thanks to Mikael from the Openbox project, who gave me lots of ideas and
+	"Thanks to Mikael from the Openbox project, who gave me lots of ideas and
 	tested the program. And thanks to all the helpful guys in the openbox
-	list.
+	list." - Manuel Colmenero
 
 NOTICE:
 
