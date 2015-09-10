@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 import os, sys, glob
 from distutils.core import setup
 

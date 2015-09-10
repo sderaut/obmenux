@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 from distutils.core import setup
 setup(name='obMenu',
       version='1.0',

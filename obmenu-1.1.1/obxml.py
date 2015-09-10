@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 #  obxmlx.py component of
 #  Openbox Menu Editor X 1.1.1  2015 by SDE
 #

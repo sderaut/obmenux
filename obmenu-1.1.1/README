@@ -7,7 +7,7 @@ in an intuitive way.
 
 REQUIREMENTS:
 
-  python >= 2.7, pygtk, python-glade
+  python = 2.7, pygtk, python-glade
 
 INSTALLATION:
 	
@@ -15,10 +15,10 @@ INSTALLATION:
   
   su
   <password>
-  python setup.py install
+  python2 setup.py install
 
   or
-  python minisetup.py install
+  python2 minisetup.py install
   if you don't want the pipemenus
 	
 CHANGELOG:
