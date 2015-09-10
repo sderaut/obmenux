@@ -1,13 +1,13 @@
 ==========
-OBMENU 1.0
+OBMENU 1.1.1
 ==========
 
-Obmenu is an Openbox menu editor, written in python. It allows to edit menus
+Obmenu is an Openbox menu editor, written in Python. It allows editing menus
 in an intuitive way.
 
-REQUERIMENTS:
+REQUIREMENTS:
 
-  python >= 2.3, pygtk, python-glade
+  python >= 2.7, pygtk, python-glade
 
 INSTALLATION:
 	
@@ -23,6 +23,13 @@ INSTALLATION:
 	
 CHANGELOG:
 
+- version 1.1.1 moving items between menus (or into or out of menus, including
+  moving menus into or out of menus) (deprecated use with Python 2.3 to 2.6)
+
+- version 1.0-2 Debian patches
+    - enable closing the help window by its "Close" button
+    - enable creating .config/openbox/menu.xml if it doesn't already exist.
+
 - Automatically reconfigures Openbox
 
 - Create and modify pipemenus. Pipemenus are a way of creating menus
@@ -36,6 +43,12 @@ CHANGELOG:
 - Multifile support (New, open, save, ..)
 
 CREDITS:
+	
+	SDE 2015
+	
+	patches by Debian maintainers
+	
+	very much based on and with thanks to
 	
 	Manuel Colmenero 2005-2006
 	
