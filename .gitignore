@@ -1,0 +1,13 @@
+# the gitignore file for the repo "obmenux"
+
+# ignore any directory named __pycache__
+__pycache__/
+
+# ignore the 'build' directory created by setup scripts
+build/
+
+# ignore hidden files
+.*
+# except this .gitignore
+!.gitignore
+
