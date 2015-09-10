@@ -727,7 +727,7 @@ Exit</property>
 </widget>
 
 <widget class="GtkAboutDialog" id="aboutdialog1">
-  <property name="visible">True</property>
+  <property name="visible">False</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">Openbox Menu Editor X</property>
   <property name="comments" translatable="yes">Thank you for using this software.
