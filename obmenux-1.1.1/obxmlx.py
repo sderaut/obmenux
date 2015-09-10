@@ -302,10 +302,13 @@ class ObMenux:
 				dom_mnu2 = self.dom.documentElement
 		i1 = self._get_real_num(src_menu, n1)
 		i2 = self._get_real_num(dest_menu, n2)
-		tmp = dom_mnu1.childNodes[i1].cloneNode(deep=True) # should work if X
-		dom_mnu1.removeChild(dom_mnu1.childNodes[i1]) # exprmntl rewrite
-		
-		dom_mnu2.insertBefore(tmp, dom_mnu2.childNodes[i2]) # ditto
+		tmp = dom_mnu1.childNodes[i1].cloneNode(deep=True)
+		dom_mnu1.removeChild(dom_mnu1.childNodes[i1])
+		if i2 == -1:
+			print("trying insertBefore None to append")
+			dom_mnu2.insertBefore(tmp, None) # appendChild does other actions
+		else:
+			dom_mnu2.insertBefore(tmp, dom_mnu2.childNodes[i2])
 	
 	def setItemProps(self, menu, n, label, action, exe):
 		itm = self._get_dom_item(menu,n)
