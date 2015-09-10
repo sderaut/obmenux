@@ -1,7 +1,9 @@
 #!/usr/bin/python
+#  obmenux.py component of
+#  Openbox Menu Editor X 1.1.1  2015 by SDE
 #
+#  based on
 #  Openbox Menu Editor 1.0 beta
-# 
 #  Copyright 2005 Manuel Colmenero 
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -405,6 +407,200 @@ class App:
 		self.label_entry.grab_focus()
 		
 		self._sth_changed(True)
+		
+	def getMenuRecursive(self, menuid):
+		menu_content = self.menu.getMenu(menuid)
+		for it in menu_content:
+			if it["type"] == "menu" and it["action"] != "Pipemenu" and it["action"] != "Link":
+				it["content"] = self.getMenuRecursive(it["id"])
+		return menu_content
+	
+	def setMenuRecursive(self, menuid, menu_content):
+		for it in menu_content:
+			if it["type"] == "separator":
+				self.menu.createSep(menuid)
+			elif it["type"] == "menu":
+				if it["action"] == "Pipemenu":
+					self.menu.createPipe(menuid, it["label"], it["execute"], it["id"])
+				elif it["action"] == "Link":	
+					self.menu.createLink(menuid, it["id"])
+				else:
+					self.menu.createMenu(menuid, it["label"], it["id"])
+				if "content" in it:
+					self.setMenuRecursive(it["id"], it["content"])
+			else:
+				self.menu.createItem(menuid, it["label"], it["action"], it["execute"])
+
+	def move_anything_anywhere(self, model, ite, parent2, n2=0, sib=None, skew="prepend"):
+	
+		(label, tipe, action, exe, menu, mid) = model.get(ite,0,1,2,3,4,5)
+		n = model.get_path(ite)[-1]
+		
+		if tipe == "menu":
+			if action == "Pipemenu":
+				actual_type = "Pipemenu"
+			elif action == "Link":
+				actual_type = "Link"
+			else:
+				actual_type = "Menu"
+				menu_content = self.getMenuRecursive(mid)
+
+			if model.iter_has_child(ite):
+				self.menu.removeMenu(mid)
+			else:
+				self.menu.removeItem(menu, n)								
+		else:
+			actual_type = tipe
+			self.menu.removeItem(menu, n)
+
+		model.remove(ite)
+		
+		if parent2 is None:
+			print "Warning: dest menu is None"
+			# (aa, bb, cc, dd, ee, mid2) = model.get(model.get_iter_root(),0,1,2,3,4,5)
+			mid2 = None
+		else:
+		    (aa, bb, cc, dd, menu2, mid2) = model.get(parent2,0,1,2,3,4,5)
+		if mid2 is None:
+		    print "Warning: dest menu id is None"
+		else:
+			print "dest menu id ", mid2
+		
+		if skew == "append":
+			if mid2 is None:
+				n2 = None
+			else:
+				n2 = self.menu._get_menu_len(mid2)
+		elif skew == "prepend":
+			n2 = 0
+		elif skew == "after":
+			n2 += 1
+
+		if actual_type == "Pipemenu":
+			self.menu.createPipe(mid2, mid, label, execute, n2)
+		elif actual_type == "Link":
+			self.menu.createLink(mid2, mid, n2)
+		elif actual_type == "Menu":
+			self.menu.createMenu(mid2, label, mid, n2)
+			self.setMenuRecursive(mid, menu_content)
+		else:
+			self.menu.createItem(mid2, label, action, exe, n2)
+		
+		dat = (label, tipe, action, exe, mid2, mid)
+		
+		if skew == "before":
+			itm = self.treemodel.insert_before(parent2, sib, dat)
+		elif skew == "after":
+			itm = self.treemodel.insert_after(parent2, sib, dat)
+		elif skew == "prepend":
+			itm = self.treemodel.prepend(parent2, dat)
+		elif skew == "append":
+			itm = self.treemodel.append(parent2, dat)
+		
+		if actual_type == "Menu":
+			self.createTree(itm, mid)				
+		
+		parent3 = model.iter_parent(itm)
+		if parent3 is None:
+			result5 = None
+		else:
+			(result4, result5) = model.get(model.iter_parent(itm),4,5)
+		if result5 != mid2:
+			print ("Failure: item/menu went to ", result5, " in treemodel,",
+				" but ", mid2, " in XML dom.")
+		
+		self._sth_changed(True)
+		path = model.get_path(itm)
+		self.treeview.set_cursor(path, None, False)
+		self.id_entry.select_region(0, -1)
+		self.id_entry.grab_focus()
+	
+	def move_anything_anywhere2(self, model, ite, parent2, n2=0, sib=None, skew="prepend"):
+	
+		(label, tipe, action, exe, menu, mid) = model.get(ite,0,1,2,3,4,5)
+		n = model.get_path(ite)[-1]
+		
+		if tipe == "menu":
+			if action == "Pipemenu":
+				actual_type = "Pipemenu"
+			elif action == "Link":
+				actual_type = "Link"
+			else:
+				actual_type = "Menu"
+				# menu_content = self.getMenuRecursive(mid)
+
+			#if model.iter_has_child(ite):
+			#	self.menu.removeMenu(mid)
+			#else:
+			#	self.menu.removeItem(menu, n)								
+		else:
+			actual_type = tipe
+			#self.menu.removeItem(menu, n)
+
+		model.remove(ite)
+		
+		if parent2 is None:
+			print "Warning: dest menu is None"
+			# (aa, bb, cc, dd, ee, mid2) = model.get(model.get_iter_root(),0,1,2,3,4,5)
+			mid2 = None
+		else:
+		    (aa, bb, cc, dd, menu2, mid2) = model.get(parent2,0,1,2,3,4,5)
+		if mid2 is None:
+		    print "Warning: dest menu id is None"
+		else:
+			print "dest menu id ", mid2
+		
+		if skew == "append":
+			if mid2 is None:
+				n2 = None
+			else:
+				n2 = self.menu._get_menu_len(mid2)
+		elif skew == "prepend":
+			n2 = 0
+		elif skew == "after":
+			n2 += 1
+		
+		comment = '''
+		if actual_type == "Pipemenu":
+			self.menu.createPipe(mid2, mid, label, execute, n2)
+		elif actual_type == "Link":
+			self.menu.createLink(mid2, mid, n2)
+		elif actual_type == "Menu":
+			self.menu.createMenu(mid2, label, mid, n2)
+			self.setMenuRecursive(mid, menu_content)
+		else:
+			self.menu.createItem(mid2, label, action, exe, n2)
+		'''
+		self.menu.jumpMove(menu, n, mid2, n2)
+		
+		dat = (label, tipe, action, exe, mid2, mid)
+		
+		if skew == "before":
+			itm = self.treemodel.insert_before(parent2, sib, dat)
+		elif skew == "after":
+			itm = self.treemodel.insert_after(parent2, sib, dat)
+		elif skew == "prepend":
+			itm = self.treemodel.prepend(parent2, dat)
+		elif skew == "append":
+			itm = self.treemodel.append(parent2, dat)
+		
+		if actual_type == "Menu":
+			self.createTree(itm, mid)				
+		
+		parent3 = model.iter_parent(itm)
+		if parent3 is None:
+			result5 = None
+		else:
+			(result4, result5) = model.get(model.iter_parent(itm),4,5)
+		if result5 != mid2:
+			print ("Failure: item/menu went to ", result5, " in treemodel,",
+				" but ", mid2, " in XML dom.")
+
+		self._sth_changed(True)
+		path = model.get_path(itm)
+		self.treeview.set_cursor(path, None, False)
+		self.id_entry.select_region(0, -1)
+		self.id_entry.grab_focus()
 
 	# up button clicked
 	def up(self,param):
@@ -415,14 +611,29 @@ class App:
 		p = model.get_path(ite)
 		n = p[len(p)-1]
 		if n > 0:
-			self._sth_changed(True)
-			self.menu.interchange(menu, n, n-1)
 			l = list(p)
 			l[len(l)-1] -= 1
-			p = tuple(l)
-			upper = model.get_iter(p)
-			model.move_before(ite,upper)
-	
+			t = tuple(l)
+			upper = model.get_iter(t)
+			utype = model.get(upper,1,2)
+			if utype[0] == "menu" and utype[1] != "Pipemenu" and utype[1] != "Link":
+				# move item/menu up into a menu
+				self.move_anything_anywhere2(model, ite, upper, skew="append")
+			else:
+				self.menu.interchangeX(menu, n, n-1)
+				model.move_before(ite,upper)
+				self._sth_changed(True)
+		elif n == 0 and menu is not None and menu != "":
+			# move item/menu out of menu and up
+			parent = model.iter_parent(ite)
+			if parent is None:
+				parent2 = model.get_iter_root()
+				n2 = 0
+			else:
+				parent2 = model.iter_parent(parent)
+				n2 = model.get_path(parent)[-1]
+			self.move_anything_anywhere2(model, ite, parent2, n2, parent, "before")
+			
 	# down button clicked
 	def down(self,param):
 		(model, ite) = self.treeview.get_selection().get_selected()
@@ -430,14 +641,30 @@ class App:
 		(label, tipe, action, exe, menu, mid) = model.get(ite,0,1,2,3,4,5)
 		p = model.get_path(ite)
 		n = p[len(p)-1]
-		if n < self.menu._get_menu_len(menu) -1:
-			self._sth_changed(True)
-			self.menu.interchange(menu, n, n+1)
+		m_len = self.menu._get_menu_len(menu)
+		if n < m_len - 1:
 			l = list(p)
 			l[len(l)-1] += 1
-			p = tuple(l)
-			upper = model.get_iter(p)
-			model.move_after(ite,upper)
+			t = tuple(l)
+			lower = model.get_iter(t)
+			ltype = model.get(lower,1,2)
+			if ltype[0] == "menu" and ltype[1] != "Pipemenu" and ltype[1] != "Link":
+				# move item/menu down into a menu
+				self.move_anything_anywhere2(model, ite, lower, skew="prepend")
+			else:
+				self.menu.interchangeX(menu, n, n+1)
+				model.move_after(ite,lower)
+				self._sth_changed(True)
+		elif n == m_len - 1 and menu is not None and menu != "":
+			# move item/menu out of menu and down
+			parent = model.iter_parent(ite)
+			if parent is None:
+				parent2 = model.get_iter_root()
+				n2 = 0
+			else:
+				parent2 = model.iter_parent(parent)
+				n2 = model.get_path(parent)[-1]
+			self.move_anything_anywhere2(model, ite, parent2, n2, parent, "after")
 	
 	# remove button clicked
 	def remove(self, param):

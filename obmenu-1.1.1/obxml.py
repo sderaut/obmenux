@@ -1,7 +1,8 @@
-#  obxml.py
+#  obxmlx.py component of
+#  Openbox Menu Editor X 1.1.1  2015 by SDE
 #
-#  Openbox Menu Editor 1.0 beta
-# 
+#  based on
+#  Openbox Menu Editor 1.0 beta 
 #  Copyright 2005 Manuel Colmenero 
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -32,8 +33,10 @@ class ObMenu:
 	# given its ID, and its parent (or None for top-level)
 	# returns the dom tree of the menu. Recursively.
 	def _get_dom_menu(self, menu, parent=None):
-		if not menu: return None
-		if not parent: parent = self.dom.documentElement
+		if menu is None: #BUGFIX was `if not menu` but menu may be falsy and valid
+			return self.dom.documentElement #BUGFIX was `return None`
+		if parent is None: #BUGFIX was `if not parent` but parent may be falsy
+			parent = self.dom.documentElement
 		
 		for item in parent.childNodes:
 			if item.nodeName == "menu" and item.hasChildNodes():
@@ -41,12 +44,13 @@ class ObMenu:
 				else:
 					b = self._get_dom_menu(menu, item)
 					if b: return b
-		return None
+		return None #code-clean redundant
 
 	# given its ID, and its parent (or None for top-level)
 	# returns the dom tree of the menu. Recursively.
 	def _get_dom_ref(self, menu, parent):
-		if not parent: parent = self.dom.documentElement
+		if parent is None: #BUGFIX was `if not parent` but parent id may be falsy
+			parent = self.dom.documentElement
 		for item in parent.childNodes:
 			if item.nodeName == "menu":
 				if not item.hasChildNodes():
@@ -54,15 +58,16 @@ class ObMenu:
 				else:
 					b = self._get_dom_menu(menu, item)
 					if b: return b
-		return None
+		return None #code-clean redundant
 	
 	# Get an item of 'menu', given its number (order)
 	def _get_dom_item(self,menu,num):
-		if not menu:
+		if menu is None: #BUGFIX was `if not menu`
 			item = self.dom.documentElement
 		else:
 			item = self._get_dom_menu(menu)
-			if not item: return None
+			if not item:
+				item = self.dom.documentElement #BUGFIX was `return None`
 		i = 0
 		for it in item.childNodes:
 			if it.nodeType == 1:
@@ -82,11 +87,14 @@ class ObMenu:
 	
 	# Get the number of items of a menu
 	def _get_menu_len(self,menu):
-		if menu:
+		if menu is not None: #BUGFIX was `if menu`
 			item = self._get_dom_menu(menu)
+			if item is None:
+				item = self.dom.documentElement #BUGFIX maybe
 		else:
 			item = self.dom.documentElement
 		i = 0
+		if item is None: return i #BUGFIX None has no childNodes
 		for it in item.childNodes:
 			if it.nodeType == 1:
 				i += 1
@@ -94,8 +102,9 @@ class ObMenu:
 	
 	# Get "real" item number (counting with comments, text, etc in the xml)
 	def _get_real_num(self,menu,num):
-		if menu:
+		if menu is not None: #BUGFIX was `if menu`
 			item = self._get_dom_menu(menu)
+			if item is None: item = self.dom.documentElement #BUGFIX maybe
 		else:
 			item = self.dom.documentElement
 		i = 0
@@ -105,6 +114,9 @@ class ObMenu:
 				if i == num: return n
 				i += 1
 			n += 1
+		n = -1
+		print "warning fake number ", n, " for ", menu, " number ", num
+		return n #BUGFIX was returning None from an expected fn -> int
 	
 	# get the properties of an item from the xml, and returns them as a
 	# dictionary.
@@ -182,16 +194,24 @@ class ObMenu:
 		return res
 				
 	def removeItem(self,menu, num):
-		if menu:
+		if menu is not None: #BUGFIX was `if menu`, bad b/c menuid "" may be falsy
 			dom_mnu = self._get_dom_menu(menu)
+			if dom_mnu is None:
+				dom_mnu = self.dom.documentElement #BUGFIX maybe
 		else:
 			dom_mnu = self.dom.documentElement
 		item = self._get_dom_item(menu,num)
+		if item is None:
+			print "Warning: an item was not removed"
+			return #BUGFIX let's not destroy the dom
 		dom_mnu.removeChild(item)
 		item.unlink()
 	
 	def removeMenu(self,menu):
 		dom_mnu = self._get_dom_menu(menu)
+		if dom_mnu is None:
+			print "Warning: a menu was not removed"
+			return #BUGFIX None has no parentNode
 		if not dom_mnu.parentNode:
 			self.dom.documentElement.removeChild(dom_mnu)
 		else:
@@ -238,15 +258,53 @@ class ObMenu:
 		self._put_dom_item(menu, nodo, pos)
 		
 	def interchange(self, menu, n1, n2):
-		if not menu:
+		if menu is None: #BUGFIX was `if not menu`
 			dom_mnu = self.dom.documentElement
 		else:
 			dom_mnu = self._get_dom_menu(menu)
+			if dom_mnu is None:
+				dom_mnu = self.dom.documentElement #BUGFIX maybe
 		i1 = self._get_real_num(menu, n1)
 		i2 = self._get_real_num(menu, n2)
+		if i1 is None or i2 is None: #safety against a crash when failing
+			i1 = n1; i2 = n2; print "Warning: real numbers not provided"
 		uno = dom_mnu.childNodes[i1]
 		dom_mnu.childNodes[i1] = dom_mnu.childNodes[i2]
 		dom_mnu.childNodes[i2] = uno
+		
+	def interchangeX(self, menu, n1, n2): # rewrite, seems to work
+		if menu is None:
+			dom_mnu = self.dom.documentElement
+		else:
+			dom_mnu = self._get_dom_menu(menu)
+			if dom_mnu is None:
+				dom_mnu = self.dom.documentElement
+		i1 = self._get_real_num(menu, n1)
+		i2 = self._get_real_num(menu, n2)
+		tmp1 = dom_mnu.childNodes[i1].cloneNode(deep=True)
+		tmp2 = dom_mnu.childNodes[i2].cloneNode(deep=True)
+		dom_mnu.replaceChild(tmp2, dom_mnu.childNodes[i1])
+		dom_mnu.replaceChild(tmp1, dom_mnu.childNodes[i2])
+			
+	def jumpMove(self, src_menu, n1, dest_menu, n2): # new feature
+		if src_menu is None:
+			dom_mnu1 = self.dom.documentElement
+		else:
+			dom_mnu1 = self._get_dom_menu(src_menu)
+			if dom_mnu1 is None:
+				dom_mnu1 = self.dom.documentElement
+		if dest_menu is None:
+			dom_mnu2 = self.dom.documentElement
+		else:
+			dom_mnu2 = self._get_dom_menu(dest_menu)
+			if dom_mnu2 is None:
+				dom_mnu2 = self.dom.documentElement
+		i1 = self._get_real_num(src_menu, n1)
+		i2 = self._get_real_num(dest_menu, n2)
+		tmp = dom_mnu1.childNodes[i1].cloneNode(deep=True) # should work if X
+		dom_mnu1.removeChild(dom_mnu1.childNodes[i1]) # exprmntl rewrite
+		
+		dom_mnu2.insertBefore(tmp, dom_mnu2.childNodes[i2]) # ditto
 	
 	def setItemProps(self, menu, n, label, action, exe):
 		itm = self._get_dom_item(menu,n)
@@ -294,7 +352,7 @@ class ObMenu:
 		if prnt: mnu = self._get_dom_ref(mid, prnt)
 		if mnu: mnu.setAttribute("execute", execute)
 	
-	# Return just an item, given its parent menu an its number
+	# Return just an item, given its parent menu and its number #spelling and
 	def getItem(self,menu,num):
 		mnu = self._get_dom_menu(menu)
 		if not mnu: return
@@ -307,7 +365,7 @@ class ObMenu:
 					elif i.nodeName == "separator":
 						return { "type": "separator" }
 					elif i.nodeName == "item":
-						return self.get_item_props(i)
+						return self._get_item_props(i) #BUGFIX was missing _
 				n += 1
 	
 	# Is menu? Returns True if it's an existing ID
@@ -320,12 +378,13 @@ class ObMenu:
 		
 	
 	# Returns a whole menu, as a list of dictionaries.
-	# Each dictionary has the items properties.
+	# Each dictionary has the item's properties.         #spelling '
 	def getMenu(self,menu):
 		lst = []
-		if menu:
+		if menu is not None: #BUGFIX was `if menu`
 			mnu = self._get_dom_menu(menu)
-			if not mnu: return
+			if mnu is None:
+				mnu = self.dom.documentElement #BUGFIX was `return`
 		else:
 			mnu = self.dom.documentElement
 		for i in mnu.childNodes:
@@ -343,7 +402,7 @@ class ObMenu:
 		return lst
 
 	# replace all old_id's in file with new_id's
-	# parent shuld start with None	
+	# parent should start with None	                #spelling should
 	def replaceId(self, old_id, new_id, parent=None):
 		if not parent: parent = self.dom.documentElement
 		for item in parent.childNodes:
@@ -354,5 +413,5 @@ class ObMenu:
 					self.replaceId(old_id, new_id, item)
 
 if __name__ == "__main__":
-	print "This is a module. Use obmenu instead."
+	print "This is a library module. Run obmenux instead." #changed name
 	exit(0)
