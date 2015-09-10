@@ -1,5 +1,8 @@
-#!/usr/bin/env python -O
+#!/usr/bin/env python2 -O
 #########################################################################
+#  obmx-dir component of obmenux
+#  version by SDE 2015
+#  based on obm-dir
 #  Copyright 2005 Manuel Colmenero 
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -18,9 +21,10 @@
 #
 ########################################################################
 
-# This is an example of what the obxml module can do
+# This is an example of what the obxmlx module can do
+# (obmenux version not tested yet)
 
-import obxml, sys, os, time
+import obxmlx, sys, os, time
 
 def alfabetiza(lista):
 	dic = {}
@@ -60,7 +64,7 @@ def clasifica(lista, humbral):
 			lgrupos.append( ( "%s-%s" % (primera, k), grupo) )
 		return lgrupos
 	
-menu = obxml.ObMenu()
+menu = obxmlx.ObMenux()
 menu.newPipe()
 
 if len(sys.argv) == 3:

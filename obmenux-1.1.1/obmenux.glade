@@ -5,7 +5,7 @@
 
 <widget class="GtkWindow" id="window1">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Openbox Menu Editor</property>
+  <property name="title" translatable="yes">Openbox Menu Editor X</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -729,8 +729,8 @@ Exit</property>
 <widget class="GtkAboutDialog" id="aboutdialog1">
   <property name="visible">True</property>
   <property name="destroy_with_parent">True</property>
-  <property name="name" translatable="yes">Openbox Menu Editor</property>
-  <property name="comments" translatable="yes">Thank you for using this sofware.
+  <property name="name" translatable="yes">Openbox Menu Editor X</property>
+  <property name="comments" translatable="yes">Thank you for using this software.
  Send any feedback on this version via
  https://github.com/sderaut/obmenux</property>
  <!-- feedback on original obmenu was to m.kolme@gmail.com -->
@@ -753,8 +753,9 @@ Exit</property>
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</property>
   <property name="website">http://obmenu.sourceforge.net/</property>
-  <property name="website_label" translatable="yes">Website</property>
-  <property name="authors">Manuel Colmenero &lt;m.kolme@gmail.com&gt;</property>
+  <property name="website_label" translatable="yes">Original Version Website</property>
+  <property name="authors">SDE &lt;sderaut@users.noreply.github.com&gt;
+  Manuel Colmenero &lt;m.kolme@gmail.com&gt;</property>
   <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
   <property name="logo">mnu48.png</property>
 </widget>

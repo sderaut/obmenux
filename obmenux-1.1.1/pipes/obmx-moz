@@ -1,5 +1,8 @@
-#!/usr/bin/env python -O
+#!/usr/bin/env python2 -O
 #########################################################################
+#  obmx-moz component of obmenux
+#  version by SDE 2015
+#  based on obm-moz
 #  Copyright 2005 Manuel Colmenero 
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -19,13 +22,14 @@
 ########################################################################
 #
 # a mozilla bookmarks to openbox menus translator
-#
+# (obmenux version not tested yet)
 
-import obxml, sys, os
+
+import obxmlx, sys, os
 from HTMLParser import HTMLParser
 from optparse import OptionParser
 
-class MozParser(HTMLParser, obxml.ObMenu):
+class MozParser(HTMLParser, obxmlx.ObMenux):
 	
 	def init(self):
 		self.stack = [None]
@@ -109,7 +113,7 @@ def get_mozilla_bm ():
 	return ""
 
 def print_error(error):
-	obm = obxml.ObMenu()
+	obm = obxmlx.ObMenux()
 	obm.newPipe()
 	for line in error.split("\n"):
 		obm.createItem(None, line, "Execute", "true")

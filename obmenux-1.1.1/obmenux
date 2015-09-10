@@ -20,7 +20,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import obxml, gtk, gtk.glade, gobject, random, time, os, sys
+import obxmlx, gtk, gtk.glade, gobject, random, time, os, sys
 
 class App:
 	def reconfigureOpenbox(self):
@@ -55,7 +55,7 @@ class App:
 		self.sth_changed = op
 		if op: s = "(*)"
 		else: s = ""
-		self.arbol.get_widget("window1").set_title("Obmenu: %s %s" % (self.menu_path, s))
+		self.arbol.get_widget("window1").set_title("Obmenux: %s %s" % (self.menu_path, s))
 	
 	# Auxiliary function for model.foreach()
 	def _change_id(self, model, path, it,(old_id, new_id)):
@@ -117,7 +117,7 @@ class App:
 		self._sth_changed(False)
 		
 		# Load in memory the real xml menu
-		self.menu = obxml.ObMenu()
+		self.menu = obxmlx.ObMenux()
 		self.menu.loadMenu(self.menu_path)
 		
 		self.deleteTree() #Not really deleting this time, just initialiting
@@ -733,8 +733,8 @@ class App:
 
 		else:
 			print "Error: Wrong number of arguments"
-			print "Usage: obmenu /path/to/menu.xml"
-			print "\tOr just obmenu, to edit the default file"
+			print "Usage: obmenux /path/to/menu.xml"
+			print "\tOr just obmenux, to edit the default file"
 			return
 			
 		if not os.path.isfile(self.menu_path):
@@ -744,19 +744,19 @@ class App:
 		self.unsaved_menu = False
 		
 		# Load in memory the real xml menu
-		self.menu = obxml.ObMenu()
+		self.menu = obxmlx.ObMenux()
 		self.menu.loadMenu(self.menu_path)
 		
 		# Look for my glade file!
-		if os.path.isfile("obmenu.glade"):
+		if os.path.isfile("obmenux.glade"):
 			# It's here.. looks like a pre-installation execution
-			self.gladefile = "obmenu.glade"
-		elif os.path.isfile("/usr/local/share/obmenu/obmenu.glade"):
-			self.gladefile = "/usr/local/share/obmenu/obmenu.glade"
-		elif os.path.isfile("/usr/share/obmenu/obmenu.glade"):
-			self.gladefile = "/usr/share/obmenu/obmenu.glade"
+			self.gladefile = "obmenux.glade"
+		elif os.path.isfile("/usr/local/share/obmenux/obmenux.glade"):
+			self.gladefile = "/usr/local/share/obmenux/obmenux.glade"
+		elif os.path.isfile("/usr/share/obmenux/obmenux.glade"):
+			self.gladefile = "/usr/share/obmenux/obmenux.glade"
 		else:
-			print "ERROR: obmenu.glade not found!"
+			print "ERROR: obmenux.glade not found!"
 			print "       check that everything was installed all right"
 			sys.exit(1)
 		

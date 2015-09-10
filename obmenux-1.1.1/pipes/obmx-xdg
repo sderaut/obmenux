@@ -1,5 +1,8 @@
-#!/usr/bin/python -O 
+#!/usr/bin/env python2 -O
 #########################################################################
+#  obmx-xdg component of obmenux
+#  version by SDE 2015
+#  based on obm-xdg
 #  Copyright 2005 Manuel Colmenero 
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -20,8 +23,10 @@
 #
 # a free desktop menus implementation for openbox
 #
+# (obmenux version not tested yet)
 
-import xml.dom.minidom, obxml, os, sys, time
+
+import xml.dom.minidom, obxmlx, os, sys, time
 
 class XdgMenu:
 	
@@ -445,7 +450,7 @@ if __name__ == "__main__":
 	if role in ("replace", "import"):
 	
 		mnu.loadItems()
-		obmenu = obxml.ObMenu()
+		obmenu = obxmlx.ObMenux()
 		obmenu.newMenu()
 		
 		if role == "replace":
@@ -462,7 +467,7 @@ if __name__ == "__main__":
 		if role == "replace":
 			obmenu.createMenu(mnuid, "Openbox", "Openbox-Conf-Menu")
 			obmenu.createItem("Openbox-Conf-Menu", "Edit preferences", "Execute", "obconf")
-			obmenu.createItem("Openbox-Conf-Menu", "Edit menus", "Execute", "obmenu")
+			obmenu.createItem("Openbox-Conf-Menu", "Edit menus", "Execute", "obmenux")
 			obmenu.createItem("Openbox-Conf-Menu", "Reload prefences", "Reconfigure", "")
 			obmenu.createSep("Openbox-Conf-Menu")
 			obmenu.createItem("Openbox-Conf-Menu", "Exit", "Exit", "")
@@ -496,7 +501,7 @@ if __name__ == "__main__":
 				sys.exit()
 				
 		mnu.loadItems()
-		obmenu = obxml.ObMenu()
+		obmenu = obxmlx.ObMenux()
 	
 		obmenu.newPipe()
 		mnu._create_obmenu(obmenu)

@@ -1,5 +1,8 @@
-#!/usr/bin/env python -O 
+#!/usr/bin/env python2 -O
 #########################################################################
+#  obmx-nav component of obmenux
+#  version by SDE 2015
+#  based on obm-nav
 #  Copyright 2005 Manuel Colmenero 
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -18,9 +21,11 @@
 #
 ########################################################################
 
-import obxml, sys, os
+# (obmenux version not tested yet)
 
-menu = obxml.ObMenu()
+import obxmlx, sys, os
+
+menu = obxmlx.ObMenux()
 menu.newPipe()
 if len(sys.argv) != 4:
 	menu.createItem(None, "ERROR: Wrong number of arguments", "Execute", "true")

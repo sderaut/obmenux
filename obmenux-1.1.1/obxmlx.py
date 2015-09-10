@@ -21,12 +21,12 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-# ObMenu can be used as a module in python scripts, for example, to
+# ObMenux can be used as a module in python scripts, for example, to
 # Generate dynamic menus (pipemenus)
 
 import xml.dom.minidom
 
-class ObMenu:
+class ObMenux:
 	
 	# Internal functions =============================================
 	# (These mess with the xml tree)
