@@ -7,6 +7,6 @@ setup(name='obMenux',
       author_email='sderaut@users.noreply.github.com',
       scripts=['obmenux'],
 	  py_modules=['obxmlx'],
-	  data_files=[('/usr/local/share/obmenux', ['obmenux.glade', 'icons/mnu16.png', 'icons/mnu48.png'])]
+	  data_files=[('/usr/local/share/obmenux', ['gfx/obmenux.glade', 'gfx/mnu16.png', 'gfx/mnu48.png'])]
       )
 
