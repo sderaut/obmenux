@@ -3,7 +3,9 @@ obmx-dir
 
 obmx-dir <directory> <command>
 
-Builds a menu from a directory, alphabetically sorted. Example:
+This script makes a pipe menu when given as a command in an Openbox menu.
+
+It builds a menu from a directory, alphabetically sorted. Example:
 	obmx-dir "/home/kolme/wallpaper" "fbsetbg"
 
 
@@ -34,12 +36,17 @@ obmx-nav
 
 obmx-nav <root> <filer> <terminal>
 
-Recursively builds a menu to navigate directories. Example:
+This script makes a pipe menu of file system directories when given as a
+command in an Openbox menu.
+
+It recursively builds a menu to navigate directories. Example:
 	obmx-nav /home/kolme rox aterm
+
 
 
 obmx-xdg
 =======
+usage: obmx-xdg [--import|--replace] [path]
 
 obmx-xdg --import
   Creates a file called "gnome-menus.xml"
@@ -50,5 +57,8 @@ obmx-xdg --replace
 obmx-xdg
   Prints a pipemenu (normal behaviour)
 
-A path to a different gnome menu can be passed:
+This script makes a pipe menu of menu entries from a desktop environment when
+given as a command in an Openbox menu.
+
+A path to a different GNOME menu can be passed:
 obmx-xdg [options] /path/to/system.menu

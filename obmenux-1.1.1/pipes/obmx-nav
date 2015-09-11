@@ -50,6 +50,8 @@ if not len(dirs) == 0 or not len(files) == 0:
 n = 0
 p = 1
 mid = None
+files.sort()
+dirs.sort()
 for d in dirs:
 	if n > 15:
 		menu.createSep(mid,0)
