@@ -747,7 +747,7 @@ class App:
 		if os.path.isfile(gladename):
 			# It's here.. looks like a pre-installation execution
 			self.gladefile = gladename
-		elif os.path.isfile(homegladepath)
+		elif os.path.isfile(homegladepath):
 			# precedence is from most local install to most global
 			self.gladefile = homegladepath
 		elif os.path.isfile("/usr/local/" + gladepath):
