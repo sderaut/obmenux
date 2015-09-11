@@ -11,3 +11,5 @@ build/
 # except this .gitignore
 !.gitignore
 
+# ignore .pyc files generated when running obmenux in source directory
+*.pyc

@@ -14,5 +14,5 @@ setup(name='obMenux',
       author_email='sderaut@users.noreply.github.com',
       scripts=['obmenux', 'pipes/obmx-xdg','pipes/obmx-dir','pipes/obmx-moz','pipes/obmx-nav'],
       py_modules=['obxmlx'],
-      data_files=[(libdir, ['obmenux.glade', 'icons/mnu16.png','icons/mnu48.png'])]
+      data_files=[(libdir, ['gfx/obmenux.glade', 'gfx/mnu16.png','gfx/mnu48.png'])]
       )

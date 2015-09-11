@@ -744,9 +744,9 @@ class App:
 		gladename = "obmenux.glade"
 		gladepath = "share/obmenux/" + gladename
 		homegladepath = os.path.expanduser("~/.local/" + gladepath)
-		if os.path.isfile(gladename):
-			# It's here.. looks like a pre-installation execution
-			self.gladefile = gladename
+		if os.path.isfile("gfx/" + gladename):
+			# pwd is probably installer folder, maybe a test run or pre-install
+			self.gladefile = "gfx/" + gladename
 		elif os.path.isfile(homegladepath):
 			# precedence is from most local install to most global
 			self.gladefile = homegladepath
