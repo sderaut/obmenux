@@ -42,7 +42,7 @@ CHANGELOG:
 - Automatically reconfigures Openbox when saving a file.
 
 - Creates and modifies pipemenus. Pipemenus are a way of creating menus
-  dynamically. For more info, visit [Openbox](http://openbox.org) documentation.
+  dynamically. For more info, visit Openbox documentation. (http://openbox.org)
 
 - Creates "link" menus, which are references to other menus by their IDs.
   That way you can reproduce a sub-menu in several places in a whole menu file.
