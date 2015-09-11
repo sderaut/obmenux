@@ -741,15 +741,21 @@ class App:
 		self.menu.loadMenu(self.menu_path)
 		
 		# Look for my glade file!
-		if os.path.isfile("obmenux.glade"):
+		gladename = "obmenux.glade"
+		gladepath = "share/obmenux/" + gladename
+		homegladepath = os.path.expanduser("~/.local/" + gladepath)
+		if os.path.isfile(gladename):
 			# It's here.. looks like a pre-installation execution
-			self.gladefile = "obmenux.glade"
-		elif os.path.isfile("/usr/local/share/obmenux/obmenux.glade"):
-			self.gladefile = "/usr/local/share/obmenux/obmenux.glade"
-		elif os.path.isfile("/usr/share/obmenux/obmenux.glade"):
-			self.gladefile = "/usr/share/obmenux/obmenux.glade"
+			self.gladefile = gladename
+		elif os.path.isfile(homegladepath)
+			# precedence is from most local install to most global
+			self.gladefile = homegladepath
+		elif os.path.isfile("/usr/local/" + gladepath):
+			self.gladefile = "/usr/local/" + gladepath
+		elif os.path.isfile("/usr/" + gladepath):
+			self.gladefile = "/usr/" + gladepath
 		else:
-			print "ERROR: obmenux.glade not found!"
+			print "ERROR: "+gladename+" not found!"
 			print "       check that everything was installed all right"
 			sys.exit(1)
 		
