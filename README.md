@@ -15,4 +15,4 @@ There are several sources of patches of obmenu and versions of obmenu by others,
 - obmenu3 which is written in Pascal and compiled with its Pascal dependencies
 - obmenu [untitled version] by GLolol, 2015
 
-This current obmenux started with just copying files and editing them to see what would happen. So it doesn't have a automatic GitHub connection as a fork of any other version. It's a messy version that needs some of its experimental code cleaned up before it would be suitable for packaging in a distribution's official repository.
+This current obmenux started with just copying files and editing them to see what would happen. So it doesn't have an automatic GitHub connection as a fork of any other version. It's a messy version that needs some of its experimental code cleaned up before it would be suitable for packaging in a distribution's official repository.
