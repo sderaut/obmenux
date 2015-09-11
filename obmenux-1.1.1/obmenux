@@ -509,8 +509,6 @@ class App:
 		self._sth_changed(True)
 		path = model.get_path(itm)
 		self.treeview.set_cursor(path, None, False)
-		self.id_entry.select_region(0, -1)
-		self.id_entry.grab_focus()
 	
 	def move_anything_anywhere2(self, model, ite, parent2, n2=0, sib=None, skew="prepend"):
 	
@@ -596,8 +594,6 @@ class App:
 		self._sth_changed(True)
 		path = model.get_path(itm)
 		self.treeview.set_cursor(path, None, False)
-		self.id_entry.select_region(0, -1)
-		self.id_entry.grab_focus()
 
 	# up button clicked
 	def up(self,param):
