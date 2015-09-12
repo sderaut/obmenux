@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 from distutils.core import setup
 setup(name='obMenux',
-      version='1.0',
+      version='1.1.24',
       description='Openbox Menu Editor X',
       author='SDE',
       author_email='sderaut@users.noreply.github.com',

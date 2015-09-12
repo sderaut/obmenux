@@ -730,12 +730,13 @@ Exit</property>
   <property name="visible">False</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">Openbox Menu Editor X</property>
-  <property name="comments" translatable="yes">Thank you for using this software.
+  <property name="comments" translatable="yes">version 1.1.24  2015 SDE
+ Thank you for using this software.
  Send any feedback on this version via
  https://github.com/sderaut/obmenux</property>
  <!-- feedback on original obmenu was to m.kolme@gmail.com -->
-  <property name="license" translatable="yes">    obmenux: Openbox Menu Editor
-    Experimental version 2015 SDE
+  <property name="license" translatable="yes">    obmenux: Openbox Menu Editor X
+    version 1.1.24 2015 SDE
     based on obmenu by
     Copyright (C) 2005-2006  Manuel Colmenero
 

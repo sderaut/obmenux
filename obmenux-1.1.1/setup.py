@@ -6,7 +6,7 @@ libdir = 'share/obmenux'
 sys.path += [os.path.join(os.curdir, libdir)]
 
 setup(name='obMenux',
-      version='1.1.1',
+      version='1.1.24',
       description='Openbox Menu Editor X',
       license='GPL',
       url='https://github.com/sderaut/obmenux',
