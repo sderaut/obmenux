@@ -22,8 +22,6 @@
 ########################################################################
 #
 # a free desktop menus implementation for openbox
-#
-# (obmenux version not tested yet)
 
 
 import xml.dom.minidom, obxmlx, os, sys, time
@@ -486,24 +484,45 @@ if __name__ == "__main__":
 			obmenu.saveMenu("gnome-menus.xml")
 		
 	else:
-	
-		cachefile = "%s/.obmxdg.xml" % (home)
-		if os.path.isfile(cachefile):
-			new = False
-			for appdir in mnu.getAllAppdirs():
-				if os.path.getmtime(appdir) > os.path.getmtime(cachefile):
-					new = True
-					break
-			if not new:
-				cache = open(cachefile)
-				print cache.read()
-				cache.close()
-				sys.exit()
+		
+		caching = True
+		cachedir = "%s/.local/share/obmenux" % (home)
+		if not os.path.isdir(cachedir):
+			if not os.path.isdir("%s/.local" % (home)):
+				try:
+					os.mkdir("%s/.local" % (home))
+				except: # if there's no .local for the home and we can't make one,
+					caching = False # then we shouldn't be caching by file writing
+			if not os.path.isdir("%s/.local/share" % (home)):
+				try:
+					os.mkdir("%s/.local/share" % (home))
+				except: # if there's no share in .local and we can't make one,
+					caching = False # then we shouldn't be caching by file writing
+			if caching:
+				try:
+					os.mkdir(cachedir)
+				except: # if we don't have and can't make a dir in .local/share,
+					caching = False # then we shouldn't be caching by file writing
+
+		if caching:
+			cachefile = "%s/obmx-xdg.xml" % (cachedir)
+			if os.path.isfile(cachefile):
+				new = False
+				for appdir in mnu.getAllAppdirs():
+					if os.path.getmtime(appdir) > os.path.getmtime(cachefile):
+						new = True
+						break
+				if not new:
+					cache = open(cachefile)
+					print cache.read()
+					cache.close()
+					sys.exit()
 				
 		mnu.loadItems()
 		obmenu = obxmlx.ObMenux()
 	
 		obmenu.newPipe()
 		mnu._create_obmenu(obmenu)
-		obmenu.saveMenu(cachefile)
+		if caching:
+			obmenu.saveMenu(cachefile)
 		obmenu.printXml()

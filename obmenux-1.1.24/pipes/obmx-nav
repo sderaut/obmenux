@@ -21,8 +21,6 @@
 #
 ########################################################################
 
-# (obmenux version not tested yet)
-
 import obxmlx, sys, os
 
 menu = obxmlx.ObMenux()
@@ -59,7 +57,7 @@ for d in dirs:
 		mid = "%s%d" % (sys.argv[1], p)
 		n = 0
 		p += 1
-	menu.createPipe(mid, "obm-nav-" + d, d, "%s \"%s/%s\" \"%s\" \"%s\"" % (sys.argv[0], sys.argv[1], d, sys.argv[2], sys.argv[3]))
+	menu.createPipe(mid, "obmx-nav-" + d, d, "%s \"%s/%s\" \"%s\" \"%s\"" % (sys.argv[0], sys.argv[1], d, sys.argv[2], sys.argv[3]))
 	n += 1
 for f in files:
 	if n > 15:

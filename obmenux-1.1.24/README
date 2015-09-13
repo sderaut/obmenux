@@ -1,41 +1,107 @@
 ==========
-obmenux 1.1.24
+obmenux 1.1.25
 ==========
 
-obmenux is an Openbox menu editor, written in Python, based on obmenu. It allows editing menus
-in an intuitive way.
+obmenux is an Openbox menu editor, written in Python, based on obmenu.
+It allows editing menus in an intuitive way.
 
 REQUIREMENTS:
 
-  python = 2.7, pygtk, python-glade
+  Python = 2.7, pygtk, python-glade
 
 INSTALLATION:
 	
-  Type these commands in a shell:
+  Download and extract the folder for the version you want.
   
-  su
-  <password>
-  python2 setup.py install
+  Open that folder in a terminal.
+   
+  Type:
+    sudo python2 setup.py install
+    
+  or, to install without installing the pipe menu commands:
+    sudo python2 minisetup.py install
+    
+  That script will show you what it did. Then it should be installed if nothing
+  has gone wrong.
 
-  or:
-  python2 minisetup.py install
-  if you don't want the pipemenus
+USE:
+  
+  Run it using:
+    obmenux
+  from any command line if it's installed.
+  
+  (Whether or not it is installed, you may run it when the current directory is
+  the version folder.)
+  
+  If your openbox menu for a session isn't named menu.xml, specify the file:
+    obmenux .config/openbox/session-menu-name.xml
+  
+Pipemenu use:
+  
+  To make an automatically filled menu choose "Add" click on "Pipemenu" and
+  enter the parameters for four different kinds of piped menus, as follows:
 
-  run using:
-  obmenux
+  obmx-dir <directory> <application to open files in the directory>
+
+  obmx-nav <starting directory for menu> <file manager> <terminal emulator>
+
+  obmx-moz -b <bookmarks file> -n <web browser>
+
+  obmx-xdg <Gnome .menu format file>
+      (If your system has any .menu files, they may be in /etc/xdg/menus)
+
+  The paths to files or directories should be written relative to your home
+  directory or starting with "/" for root.
   
-  or if your openbox menu for a session isn't named menu.xml:
-  obmenux .config/openbox/your-menu-name.xml
-  
-  The installation should allow continuing to use other versions of obmenu that are not named obmenux.
-  (If it causes any interference with other versions, that would be an issue to report.)
+  If you get any errors or empty menus, try running those commands in a
+  terminal to see whether they produce much <XML> as they should, or error
+  messages.
+
+  There are some additional notes in the included file "pipes-help".
+
+Details about how installation works:
+
+  "sudo" is necessary just because users don't usually have permission to write
+  to their system's /usr/local/ which is for locally installed software and not
+  for a Linux distribution's standard packages. Although Unix was originally a
+  single-user system, where it might be expected that a user would have such
+  permission, Linux is not Unix, and provides multi-user security instead.
+
+  According to how Python "distutils" works on your system, the installer may
+  write the following files:
+
+    ./build                   -- the build directory in the same folder
+
+    /usr/local/bin/obmenux    -- allows running obmenux from any directory
+
+    /usr/local/lib/python[version]/dist-packages/obxmlx.py
+                              -- a library file for code shared by all the
+                                 commands installed
+
+    /usr/local/lib/python[version]/dist-packages/obmenux[version].egg-info
+                              -- some library management that may differ on
+                                 different systems
+
+  and, if the pipe menus are installed:
+    /usr/local/bin/obmx-dir   -- makes a menu from the files in a directory
+    /usr/local/bin/obmx-nav   -- makes a menu to navigate directories
+    /usr/local/bin/obmx-moz   -- makes a menu from a bookmarks.html file
+    /usr/local/bin/obmx-xdg   -- makes a menu from a Gnome .menu file
+
+  The installation should allow continuing to use other versions of obmenu that
+  are not named obmenux. If obmenux has errors or causes any interference with
+  any other program, that would be an issue to report.
   
 CHANGELOG:
 
-- version 1.1.1 Moves items between menus (or into or out of menus, including
+- 1.1.25 tested pipemenus with patches and better instructions.
+
+- 1.1.24 precise versioning.
+
+- 1.1.1 moves items between menus (or into or out of menus, including
   moving menus into or out of menus) (deprecated use with Python 2.3 to 2.6)
 
-- version 1.0-2 Debian patches
+- Version 1.0-2 has Debian patches to the specific file named obmenu
     - enabled closing the help window by its "Close" button
     - enabled creating .config/openbox/menu.xml if it doesn't already exist.
 

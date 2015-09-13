@@ -22,7 +22,6 @@
 ########################################################################
 
 # This is an example of what the obxmlx module can do
-# (obmenux version not tested yet)
 
 import obxmlx, sys, os, time
 
@@ -44,25 +43,25 @@ def alfabetiza(lista):
 		
 def clasifica(lista, humbral):
 	lgrupos = []
-	if len(lista) / humbral > 1:
-		grupo = []
-		n = 0
-		primera = ""
-		alf = alfabetiza(lista)
-		ids = alf.keys()
-		ids.sort()
-		for k in ids:
-			if primera == "": primera = k
-			grupo = grupo + alf[k]
-			n += len(alf[k])
-			if n / humbral >= 1:
-				lgrupos.append( ( "%s-%s" % (primera, k), grupo) )
-				primera = ""
-				grupo = []
-				n = 0
-		if n != 0:
+	k = ""
+	grupo = []
+	n = 0
+	primera = ""
+	alf = alfabetiza(lista)
+	ids = alf.keys()
+	ids.sort()
+	for k in ids:
+		if primera == "": primera = k
+		grupo = grupo + alf[k]
+		n += len(alf[k])
+		if n / humbral >= 1:
 			lgrupos.append( ( "%s-%s" % (primera, k), grupo) )
-		return lgrupos
+			primera = ""
+			grupo = []
+			n = 0
+	if n != 0:
+		lgrupos.append( ( "%s-%s" % (primera, k), grupo) )
+	return lgrupos
 	
 menu = obxmlx.ObMenux()
 menu.newPipe()

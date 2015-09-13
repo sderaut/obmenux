@@ -34,7 +34,7 @@ Example:
 obmx-nav
 =======
 
-obmx-nav <root> <filer> <terminal>
+obmx-nav <root> <file-manager> <terminal>
 
 This script makes a pipe menu of file system directories when given as a
 command in an Openbox menu.

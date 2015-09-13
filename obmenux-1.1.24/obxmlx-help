@@ -20,28 +20,50 @@ NOTE: It's necessary to call one of the above before doing anything else.
  
  menu: The ID of the menu you want to modify. If None, the root menu will
  be modified.
- n: The position of the item in its submenu, starting at 0.
+ num: The position of the item in its submenu, starting at 0.
+ pos: Ditto.
  
- ObMenux.removeItem(menu, n)
+ ObMenux.removeItem(menu, num)
  
  ObMenux.removeMenu(menu)
  
- ObMenux.createSep(menum, n)
- 	If n not specified, separator will be appended
+ ObMenux.createSep(menu, pos=None)
+ 	If pos not specified, separator will be appended
 	
- ObMenux.createItem(menu, label, action, execute, n)
-    If n not specified, item will be appended
+ ObMenux.createItem(menu, label, action, execute, pos=None)
+    If pos not specified, item will be appended
 	
- ObMenux.createLink(menu, mid)
-    If n not specified, link will be appended 
+ ObMenux.createLink(menu, mid, pos=None)
+    If pos not specified, link will be appended 
 	
- ObMenux.createPipe(menu, mid, label, execute)
-    If n not specified, pipe will be appended 
+ ObMenux.createPipe(menu, mid, label, execute, pos=None)
+    If pos not specified, pipe will be appended 
 	
- ObMenux.createMenu(menu, label, mid)
-    If n not specified, menu will be appended 
+ ObMenux.createMenu(menu, label, mid, pos=None)
+    If pos not specified, menu will be appended 
 	
  ObMenux.interchange(menu, n1, n2)
+    Swaps items n1 and n2 of menu.
+    (warning, since version 1.0 writes to lists that official Python docs call
+     read-only; as of version 1.1.25 remains for compatibility; implementation
+     may be replaced by implementation of interchangeX in future versions)
+ 
+ ObMenux.interchangeX(menu, n1, n2)
+    Swaps items n1 and n2 of menu.
+    (does the same thing as interchange without writing to lists that official
+     Python docs call read-only, so maybe avoiding some bugs)
+    (preserves all XML contents of items or menus moved)
+    (new in version 1.1.1, experimental, may be renamed interchange() and
+     removed after sufficient testing)
+ 
+ ObMenux.jumpMove(src_menu, n1, dest_menu, n2)
+    Removes the source menu's n1 item, inserts copy before the destination
+    menu's n2 item. If n2 is None, appends to destination menu.
+    (preserves all XML contents of items or menus moved)
+    (new in version 1.1.1 with lack of append when n2 is None;
+     appends when n2 is None since version 1.1.11;
+     fix in version 1.1.25 avoids possible memory leak, and takes item nums as
+     they were before moving even when src_menu is the same as dest_menu)
  
  ObMenux.setItemProps(menu, n, label, action, exe)
  
@@ -54,4 +76,22 @@ NOTE: It's necessary to call one of the above before doing anything else.
 	menu_id
  ObMenux.setRefId(parent, menu_id, new_id)
  
+ --- below this line, public functions present in obmenu 1.0, but not
+     documented until obmenux 1.1.25
  
+ ObMenux.setMenuExecute(parent, menu_id, execute)
+ 
+ ObMenux.getItem(menu, num)
+ 
+ ObMenux.isMenu(menu)
+    True if it's an existing menu ID
+ 
+ ObMenux.getMenu(menu)
+    Returns list of dictionaries where each dictionary has the item's
+    properties. Not recursive, only one layer deep.
+
+ ObMenux.replaceId(old_id, new_id, parent=None)
+    replace all menu ID's in tree from parent matching old_id, with new_id
+    leaving parent unset or None is recommended
+
+

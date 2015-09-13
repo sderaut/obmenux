@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 #  obxmlx.py component of
-#  Openbox Menu Editor X 1.1  2015 by SDE
+#  Openbox Menu Editor X 1.1.25  2015 by SDE
 #
 #  based on
 #  Openbox Menu Editor 1.0 beta 
@@ -301,9 +301,12 @@ class ObMenux:
 			if dom_mnu2 is None:
 				dom_mnu2 = self.dom.documentElement
 		i1 = self._get_real_num(src_menu, n1)
-		i2 = self._get_real_num(dest_menu, n2)
 		tmp = dom_mnu1.childNodes[i1].cloneNode(deep=True)
-		dom_mnu1.removeChild(dom_mnu1.childNodes[i1])
+		dum = dom_mnu1.removeChild(dom_mnu1.childNodes[i1])
+		dum.unlink() # should be unlinked if not used according to docs
+		if src_menu == dest_menu and n1 < n2:
+		    n2 -= 1
+		i2 = self._get_real_num(dest_menu, n2)
 		if i2 == -1:
 			print("trying insertBefore None to append")
 			dom_mnu2.insertBefore(tmp, None) # appendChild does other actions

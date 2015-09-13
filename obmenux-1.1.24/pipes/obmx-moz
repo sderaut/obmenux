@@ -22,10 +22,9 @@
 ########################################################################
 #
 # a mozilla bookmarks to openbox menus translator
-# (obmenux version not tested yet)
 
 
-import obxmlx, sys, os
+import obxmlx, sys, os, ast
 from HTMLParser import HTMLParser
 from optparse import OptionParser
 
@@ -125,7 +124,7 @@ if __name__ == "__main__":
 	opt = OptionParser()
 	opt.add_option("-f", "--firefox", action="store_const", const=1, dest="nav", help="Look for Firefox bookmarks")
 	opt.add_option("-m", "--mozilla", action="store_const", const=2, dest="nav", help="Look for Mozilla Suite bookmarks")
-	opt.add_option("-b", "--bookmarks", action="store", dest="filename", help="Especify the path to the bookmarks.html file")
+	opt.add_option("-b", "--bookmarks", action="store", dest="filename", help="Specify the path to the bookmarks.html file")
 	opt.add_option("-r", "--root", action="store", dest="root", help="Root folder of the bookmarks")
 	opt.add_option("-n", "--navigator", action="store", dest="browser", help="Command to run the web browser.")
 	(opts, args) = opt.parse_args()
@@ -158,43 +157,66 @@ if __name__ == "__main__":
 			if filename == "":
 				filename = get_mozilla_bm()
 				if filename == "":
-					print_error("ERROR: No bookmarks found, please especify location.")
+					print_error("ERROR: No bookmarks found, please specify location.")
 					sys.exit(1)
 		if nav == 1:
 			filename = get_firefox_bm()
 			if filename == "":
-				print_error("ERROR: Firefox bookmarks not found, please especify location.")
+				print_error("ERROR: Firefox bookmarks not found, please specify location.")
 				sys.exit(1)
 								
 		if nav == 2:			
 			filename = get_mozilla_bm()
 			if filename == "":
-				print_error("ERROR: Mozilla suite bookmarks not found, please especify location.")
+				print_error("ERROR: Mozilla suite bookmarks not found, please specify location.")
 				sys.exit(1)
 	
-	cachefile = "%s/.obmmoz.xml" % (home)
-	lastopts = "%s/.obmmoz.conf" % (home)
+	caching = True
+	cachedir = "%s/.local/share/obmenux" % (home)
+	if not os.path.isdir(cachedir):
+		if not os.path.isdir("%s/.local" % (home)):
+			try:
+				os.mkdir("%s/.local" % (home))
+			except: # if there's no .local for the home and we can't make one,
+				caching = False # then we shouldn't be caching by file writing
+		if not os.path.isdir("%s/.local/share" % (home)):
+			try:
+				os.mkdir("%s/.local/share" % (home))
+			except: # if there's no share in .local and we can't make one,
+				caching = False # then we shouldn't be caching by file writing
+		if caching:
+			try:
+				os.mkdir(cachedir)
+			except: # if we don't have and can't make a dir in .local/share,
+				caching = False # then we shouldn't be caching by file writing
 	
-	if os.path.isfile(lastopts):
-		f = open(lastopts)
-		last = eval(f.read())
-		f.close()
-		if last == opts and os.path.isfile(cachefile) and os.path.getmtime(filename) < os.path.getmtime(cachefile):
-			cache = open(cachefile)
-			print cache.read()
-			cache.close()
-			sys.exit()
+	if caching:
+		cachefile = "%s/obmx-moz.xml" % (cachedir)
+		lastopts = "%s/obmx-moz.conf" % (cachedir)
+	
+		if os.path.isfile(lastopts):
+			f = open(lastopts)
+			last = ast.literal_eval(f.read()) # eval() here was insecure
+			f.close()
+			if (last == opts and os.path.isfile(cachefile) and
+					os.path.getmtime(filename) < os.path.getmtime(cachefile)):
+				cache = open(cachefile)
+				print cache.read()
+				cache.close()
+				sys.exit()
 			
 	mp = MozParser()
 	mp.init()
 	mp.root = root
 	mp.browser = browser
 	mp.openFile(filename)
-	mp.saveMenu(cachefile)
 	
-	f = open(lastopts, "w")
-	f.write(str(opts))
-	f.close()
+	if caching:
+		mp.saveMenu(cachefile)
+	
+		f = open(lastopts, "w")
+		f.write(str(opts))
+		f.close()
 	
 	mp.printXml()
 
