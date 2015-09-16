@@ -1,5 +1,5 @@
 ==========
-obmenux 1.1.25
+obmenux 1.1.26
 ==========
 
 obmenux is an Openbox menu editor, written in Python, based on obmenu.
@@ -81,12 +81,15 @@ Details about how installation works:
     /usr/local/lib/python[version]/dist-packages/obmenux[version].egg-info
                               -- some library management that may differ on
                                  different systems
-
+                                 
+    /usr/local/share/obmenux  -- directory where the gfx files are stored
+    
   and, if the pipe menus are installed:
-    /usr/local/bin/obmx-dir   -- makes a menu from the files in a directory
-    /usr/local/bin/obmx-nav   -- makes a menu to navigate directories
-    /usr/local/bin/obmx-moz   -- makes a menu from a bookmarks.html file
-    /usr/local/bin/obmx-xdg   -- makes a menu from a Gnome .menu file
+    /usr/local/bin/obmx-dir    -- makes a menu from the files in a directory
+    /usr/local/bin/obmx-nav    -- makes a menu to navigate directories
+    /usr/local/bin/obmx-moz    -- makes a menu from a bookmarks.html file
+    /usr/local/bin/obmx-xdg    -- makes a menu from a Gnome .menu file
+    $HOME/.local/share/obmenux -- where some pipe menus cache results for speed
 
   The installation should allow continuing to use other versions of obmenu that
   are not named obmenux. If obmenux has errors or causes any interference with
@@ -94,6 +97,12 @@ Details about how installation works:
   
 CHANGELOG:
 
+- 1.1.26 looks and acts neat enough to be usable
+           (keeps items visible when moving, when original obmenu 1.0 wouldn't,
+            and opens menus when moving items into them, which obmenu can't,
+            and blanks Action box when there's no selectable Action,
+            unlike obmenu 1.0 which grays the box, freezing mismatched info)
+         
 - 1.1.25 tested pipemenus with patches and better instructions.
 
 - 1.1.24 precise versioning.
@@ -121,7 +130,7 @@ CREDITS:
 	
 	SDE 2015
 	
-	patches by Debian maintainers
+	some patches copied from patches by Debian maintainers and by GLolol
 	
 	very much based on and with thanks to
 	

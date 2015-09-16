@@ -9,7 +9,7 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">500</property>
+  <property name="default_width">560</property>
   <property name="default_height">500</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -730,14 +730,16 @@ Exit</property>
   <property name="visible">False</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">Openbox Menu Editor X</property>
-  <property name="comments" translatable="yes">version 1.1.25  2015 SDE
+  <property name="comments" translatable="yes">version 1.1.26  2015 SDE
  Thank you for using this software.
- Send any feedback on this version via
+ Please report any issues with obmenux at
  https://github.com/sderaut/obmenux</property>
  <!-- feedback on original obmenu was to m.kolme@gmail.com -->
   <property name="license" translatable="yes">    obmenux: Openbox Menu Editor X
-    version 1.1.25  2015 SDE
-    based on obmenu by
+    version 1.1.26  2015 SDE
+    
+    based on obmenu 1.0 by Manuel Colmenero
+    http://obmenu.sourceforge.net/index.html
     Copyright (C) 2005-2006  Manuel Colmenero
 
     This program is free software; you can redistribute it and/or modify
@@ -753,9 +755,9 @@ Exit</property>
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</property>
-  <property name="website">http://obmenu.sourceforge.net/</property>
-  <property name="website_label" translatable="yes">Original Version Website</property>
-  <property name="authors">SDE &lt;sderaut@users.noreply.github.com&gt;
+  <property name="website">https://github.com/sderaut/obmenux</property>
+  <property name="website_label" translatable="yes">obmenux website</property>
+  <property name="authors">SDE &lt;sonnymoonie@gmail.com&gt;
   Manuel Colmenero &lt;m.kolme@gmail.com&gt;</property>
   <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
   <property name="logo">mnu48.png</property>

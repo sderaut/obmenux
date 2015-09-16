@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 #  obmenux.py component of
-#  Openbox Menu Editor X 1.1.25  2015 by SDE
+#  Openbox Menu Editor X 1.1.26  2015 by SDE
 #
 #  based on
 #  Openbox Menu Editor 1.0 beta
@@ -32,18 +32,23 @@ class App:
 	def createTree(self, padre, menuid):
 		for it in self.menu.getMenu(menuid):
 			if it["type"] == "item":
-				self.treemodel.append(padre, (it["label"], 'item',it["action"],it["execute"],it["parent"],""))
+				self.treemodel.append(padre, (it["label"], 'item',it["action"],
+				                              it["execute"],it["parent"],""))
 			elif it["type"] == "separator":
-				self.treemodel.append(padre, ("", "separator", "", "", it["parent"], ""))
+				self.treemodel.append(padre, ("", "separator", "", "",
+				                              it["parent"], ""))
 			elif it["type"] == "menu":
-				hijo=self.treemodel.append(padre, (it["label"], 'menu',it["action"],it["execute"], it["parent"], it["id"]))
+				hijo=self.treemodel.append(padre, (it["label"], 'menu',
+				                                   it["action"],it["execute"],
+				                                   it["parent"], it["id"]))
 				if self.menu.getMenu(it["id"]) and it["action"] == "":
 					self.createTree(hijo, it["id"])
 	
 	def deleteTree(self):
 		# treemodel.iter(label, type, [action], [execute], parent, [menu-id])
 		self.treemodel=gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
-				gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+		                             gobject.TYPE_STRING, gobject.TYPE_STRING,
+		                             gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.treeview.set_model(self.treemodel)
 		
 	# Sets the state of "menu modified"
@@ -52,10 +57,12 @@ class App:
 		self.sth_changed = op
 		if op: s = "(*)"
 		else: s = ""
-		self.arbol.get_widget("window1").set_title("Obmenux: %s %s" % (self.menu_path, s))
-	
+		self.arbol.get_widget("window1").set_title("Obmenux: %s %s" %
+		                                               (self.menu_path, s))
+
 	# Auxiliary function for model.foreach()
-	def _change_id(self, model, path, it,(old_id, new_id)):
+	def _change_id(self, model, path, it, id_pair):
+		(old_id, new_id) = id_pair
 		mid = model.get_value(it,5)
 		if mid == old_id:
 			model.set(it, 5, new_id)
@@ -73,7 +80,8 @@ class App:
 		self.auto_change = False
 	
 	def confirm(self, message):
-		dlg = gtk.MessageDialog(None,0,gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO,message)
+		dlg = gtk.MessageDialog(None,0,gtk.MESSAGE_WARNING,
+	                            gtk.BUTTONS_YES_NO,message)
 		res = dlg.run()
 		dlg.destroy()
 		if res == -8: return True
@@ -84,7 +92,8 @@ class App:
 			action = gtk.FILE_CHOOSER_ACTION_OPEN
 		else:
 			action = gtk.FILE_CHOOSER_ACTION_SAVE
-		dlg = gtk.FileChooserDialog(title,None,action,(gtk.STOCK_OK, 1, gtk.STOCK_CANCEL, 3))
+		dlg = gtk.FileChooserDialog(title,None,action,(gtk.STOCK_OK, 1,
+		                                               gtk.STOCK_CANCEL, 3))
 		dlg.set_default_response(1)
 		res = dlg.run()
 		flnm = dlg.get_filename()
@@ -94,7 +103,8 @@ class App:
 	#  New file clicked
 	def new(self, bt):
 		if self.sth_changed:
-			res = self.confirm("Changes in %s will be lost. Continue?" % (self.menu_path))
+			res = self.confirm("Changes in %s will be lost. Continue?" %
+			                   (self.menu_path))
 			if not res: return
 		self.deleteTree()
 		self.menu.newMenu()
@@ -105,7 +115,8 @@ class App:
 		
 	def open(self, bt):
 		if self.sth_changed:
-			res = self.confirm("Changes in %s will be lost. Continue?" % (self.menu_path))
+			res = self.confirm("Changes in %s will be lost. Continue?" %
+			                   (self.menu_path))
 			if not res: return
 		path = self.ask_for_path("Open", 0)
 		if not path: return
@@ -269,8 +280,11 @@ class App:
 		self.label_entry.set_text(label)
 		self.execute_entry.set_text(exe)
 		
-		self.label_entry.set_sensitive(tipe == "item" or (tipe == "menu" and action != "Link"))
+		self.label_entry.set_sensitive(tipe == "item" or (tipe == "menu" and
+		                                                  action != "Link"))
 		self.action_entry.set_sensitive(tipe == "item")
+		if tipe != "item": # improvement, when Action is not settable
+			self.action_entry.set_active(-1) # blanks Action box selection 
 		self.id_entry.set_sensitive(tipe == "menu")
 		self.id_entry.set_text(mid)
 		
@@ -310,10 +324,13 @@ class App:
 			parent = model.get_iter_root()
 			n = 0
 		
-		nmid="%s-%d%d%d" % (menu, random.randint(0,99), time.gmtime()[4], time.gmtime()[5])
+		nmid="%s-%d%d%d" % (menu, random.randint(0,99), time.gmtime()[4],
+		                    time.gmtime()[5])
 		
-		n_menu = self.treemodel.insert_before(parent, ite,("New Menu", "menu", "", "", menu, nmid))
-		itm = self.treemodel.append(n_menu, ("New Item", "item", "Execute", "command", nmid, ""))
+		n_menu = self.treemodel.insert_before(parent, ite,("New Menu", "menu",
+		                                                   "", "", menu, nmid))
+		itm = self.treemodel.append(n_menu, ("New Item", "item", "Execute",
+		                                     "command", nmid, ""))
 		self.menu.createMenu(menu, "New Menu", nmid, n)
 		self.menu.createItem(nmid, "New Item", "Execute", "command")
 		
@@ -335,8 +352,9 @@ class App:
 		parent = model.iter_parent(ite)
 		
 		self.menu.createItem(menu, "New Item", "Execute", "command", n)
-		itm = self.treemodel.insert_before(parent, ite, ("New Item", 'item','Execute','command', menu, ""))
-		
+		itm = self.treemodel.insert_before(parent, ite, ("New Item", 'item',
+		                                                 'Execute','command',
+		                                                 menu, ""))		
 		path = model.get_path(itm)
 		self.treeview.set_cursor(path, None, False)
 		self.label_entry.select_region(0, -1)
@@ -355,8 +373,8 @@ class App:
 		parent = model.iter_parent(ite)
 		
 		self.menu.createSep(menu, n)
-		itm = self.treemodel.insert_before(parent, ite, ("", 'separator', '','', menu, ""))
-		
+		itm = self.treemodel.insert_before(parent, ite, ("", 'separator', '',
+		                                                 '', menu, ""))
 		path = model.get_path(itm)
 		self.treeview.set_cursor(path, None, False)
 		self.treeview.grab_focus()
@@ -372,11 +390,11 @@ class App:
 		
 		n = model.get_path(ite)[-1]
 		parent = model.iter_parent(ite)
-		nmid="link-%d%d%d" % (random.randint(0,99), time.gmtime()[4], time.gmtime()[5])
-		
+		nmid="link-%d%d%d" % (random.randint(0,99), time.gmtime()[4],
+		                      time.gmtime()[5])
 		self.menu.createLink(menu, nmid, n)
-		itm = self.treemodel.insert_before(parent, ite, (nmid, 'menu', 'Link','', menu, nmid))
-		
+		itm = self.treemodel.insert_before(parent, ite, (nmid, 'menu', 'Link',
+		                                                 '', menu, nmid))		
 		path = model.get_path(itm)
 		self.treeview.set_cursor(path, None, False)
 		self.id_entry.select_region(0, -1)
@@ -393,24 +411,18 @@ class App:
 		
 		n = model.get_path(ite)[-1]
 		parent = model.iter_parent(ite)
-		nmid="pipe-%d%d%d" % (random.randint(0,99), time.gmtime()[4], time.gmtime()[5])
-		
+		nmid="pipe-%d%d%d" % (random.randint(0,99), time.gmtime()[4],
+		                      time.gmtime()[5])
 		self.menu.createPipe(menu, nmid, "Newpipe", "command", n)
-		itm = self.treemodel.insert_before(parent, ite, ("Newpipe", 'menu', 'Pipemenu','command', menu, nmid))
-		
+		itm = self.treemodel.insert_before(parent, ite, ("Newpipe", 'menu',
+		                                                 'Pipemenu','command',
+		                                                 menu, nmid))
 		path = model.get_path(itm)
 		self.treeview.set_cursor(path, None, False)
 		self.label_entry.select_region(0, -1)
 		self.label_entry.grab_focus()
 		
 		self._sth_changed(True)
-		
-	def getMenuRecursive(self, menuid):
-		menu_content = self.menu.getMenu(menuid)
-		for it in menu_content:
-			if it["type"] == "menu" and it["action"] != "Pipemenu" and it["action"] != "Link":
-				it["content"] = self.getMenuRecursive(it["id"])
-		return menu_content
 	
 	def setMenuRecursive(self, menuid, menu_content):
 		for it in menu_content:
@@ -418,18 +430,20 @@ class App:
 				self.menu.createSep(menuid)
 			elif it["type"] == "menu":
 				if it["action"] == "Pipemenu":
-					self.menu.createPipe(menuid, it["label"], it["execute"], it["id"])
+					self.menu.createPipe(menuid, it["label"], it["execute"],
+					                     it["id"])
 				elif it["action"] == "Link":	
 					self.menu.createLink(menuid, it["id"])
 				else:
 					self.menu.createMenu(menuid, it["label"], it["id"])
-				if "content" in it:
-					self.setMenuRecursive(it["id"], it["content"])
+				if "." in it:
+					self.setMenuRecursive(it["id"], it["."])
 			else:
-				self.menu.createItem(menuid, it["label"], it["action"], it["execute"])
+				self.menu.createItem(menuid, it["label"], it["action"],
+				                     it["execute"])
 
-	def move_anything_anywhere(self, model, ite, parent2, n2=0, sib=None, skew="prepend"):
-	
+	def move_anything_anywhere(self, model, ite, parent2, n2=0, sib=None,
+		                       skew="prepend"):	
 		(label, tipe, action, exe, menu, mid) = model.get(ite,0,1,2,3,4,5)
 		n = model.get_path(ite)[-1]
 		
@@ -440,7 +454,7 @@ class App:
 				actual_type = "Link"
 			else:
 				actual_type = "Menu"
-				menu_content = self.getMenuRecursive(mid)
+				menu_content = self.menu.getMenuRecursive(mid)
 
 			if model.iter_has_child(ite):
 				self.menu.removeMenu(mid)
@@ -453,16 +467,14 @@ class App:
 		model.remove(ite)
 		
 		if parent2 is None:
-			print "Warning: dest menu is None"
-			# (aa, bb, cc, dd, ee, mid2) = model.get(model.get_iter_root(),0,1,2,3,4,5)
+			# print("Warning: dest menu is None")
 			mid2 = None
 		else:
-		    (aa, bb, cc, dd, menu2, mid2) = model.get(parent2,0,1,2,3,4,5)
-		if mid2 is None:
-		    print "Warning: dest menu id is None"
-		else:
-			print "dest menu id ", mid2
-		
+		    (menu2, mid2) = model.get(parent2, 4, 5)
+		#if mid2 is None:
+			# print("Warning: dest menu id is None")
+		#else:
+			# print("dest menu id " + str(mid2))
 		if skew == "append":
 			if mid2 is None:
 				n2 = None
@@ -503,15 +515,18 @@ class App:
 		else:
 			(result4, result5) = model.get(model.iter_parent(itm),4,5)
 		if result5 != mid2:
-			print ("Failure: item/menu went to ", result5, " in treemodel,",
-				" but ", mid2, " in XML dom.")
-		
+			print("Failure: item/menu went to " + str(result5) +
+			      " in treemodel, but " + str(mid2) + " in XML dom.")
 		self._sth_changed(True)
+		if parent2 is not None:
+			path2 = model.get_path(parent2)
+			if not self.treeview.row_expanded(path2):
+				self.treeview.expand_row(path2, False)
 		path = model.get_path(itm)
 		self.treeview.set_cursor(path, None, False)
 	
-	def move_anything_anywhere2(self, model, ite, parent2, n2=0, sib=None, skew="prepend"):
-	
+	def move_anything_anywhere2(self, model, ite, parent2, n2=0, sib=None,
+		                        skew="prepend"):	
 		(label, tipe, action, exe, menu, mid) = model.get(ite,0,1,2,3,4,5)
 		n = model.get_path(ite)[-1]
 		
@@ -522,29 +537,20 @@ class App:
 				actual_type = "Link"
 			else:
 				actual_type = "Menu"
-				# menu_content = self.getMenuRecursive(mid)
-
-			#if model.iter_has_child(ite):
-			#	self.menu.removeMenu(mid)
-			#else:
-			#	self.menu.removeItem(menu, n)								
 		else:
 			actual_type = tipe
-			#self.menu.removeItem(menu, n)
 
 		model.remove(ite)
 		
 		if parent2 is None:
-			print "Warning: dest menu is None"
-			# (aa, bb, cc, dd, ee, mid2) = model.get(model.get_iter_root(),0,1,2,3,4,5)
+			# print("Warning: dest menu is None")
 			mid2 = None
 		else:
-		    (aa, bb, cc, dd, menu2, mid2) = model.get(parent2,0,1,2,3,4,5)
-		if mid2 is None:
-		    print "Warning: dest menu id is None"
-		else:
-			print "dest menu id ", mid2
-		
+			(menu2, mid2) = model.get(parent2, 4, 5)
+		# if mid2 is None:
+			#print("Warning: dest menu id is None")
+		# else:
+			#print("dest menu id " + str(mid2))
 		if skew == "append":
 			if mid2 is None:
 				n2 = None
@@ -555,17 +561,6 @@ class App:
 		elif skew == "after":
 			n2 += 1
 		
-		comment = '''
-		if actual_type == "Pipemenu":
-			self.menu.createPipe(mid2, mid, label, execute, n2)
-		elif actual_type == "Link":
-			self.menu.createLink(mid2, mid, n2)
-		elif actual_type == "Menu":
-			self.menu.createMenu(mid2, label, mid, n2)
-			self.setMenuRecursive(mid, menu_content)
-		else:
-			self.menu.createItem(mid2, label, action, exe, n2)
-		'''
 		self.menu.jumpMove(menu, n, mid2, n2)
 		
 		dat = (label, tipe, action, exe, mid2, mid)
@@ -588,10 +583,14 @@ class App:
 		else:
 			(result4, result5) = model.get(model.iter_parent(itm),4,5)
 		if result5 != mid2:
-			print ("Failure: item/menu went to ", result5, " in treemodel,",
-				" but ", mid2, " in XML dom.")
+			print("Failure: item/menu went to " + str(result5) +
+				  " in treemodel, but " + str(mid2) + " in XML dom.")
 
 		self._sth_changed(True)
+		if parent2 is not None:
+			path2 = model.get_path(parent2)
+			if not self.treeview.row_expanded(path2):
+				self.treeview.expand_row(path2, False)
 		path = model.get_path(itm)
 		self.treeview.set_cursor(path, None, False)
 
@@ -609,12 +608,15 @@ class App:
 			t = tuple(l)
 			upper = model.get_iter(t)
 			utype = model.get(upper,1,2)
-			if utype[0] == "menu" and utype[1] != "Pipemenu" and utype[1] != "Link":
+			if utype[0] == "menu" and (utype[1] != "Pipemenu" and
+			                           utype[1] != "Link"):
 				# move item/menu up into a menu
 				self.move_anything_anywhere2(model, ite, upper, skew="append")
 			else:
 				self.menu.interchangeX(menu, n, n-1)
 				model.move_before(ite,upper)
+				path = model.get_path(ite)
+				self.treeview.set_cursor(path)
 				self._sth_changed(True)
 		elif n == 0 and menu is not None and menu != "":
 			# move item/menu out of menu and up
@@ -625,8 +627,9 @@ class App:
 			else:
 				parent2 = model.iter_parent(parent)
 				n2 = model.get_path(parent)[-1]
-			self.move_anything_anywhere2(model, ite, parent2, n2, parent, "before")
-			
+			self.move_anything_anywhere2(model, ite, parent2, n2, parent,
+			                             "before")
+
 	# down button clicked
 	def down(self,param):
 		(model, ite) = self.treeview.get_selection().get_selected()
@@ -641,12 +644,15 @@ class App:
 			t = tuple(l)
 			lower = model.get_iter(t)
 			ltype = model.get(lower,1,2)
-			if ltype[0] == "menu" and ltype[1] != "Pipemenu" and ltype[1] != "Link":
+			if ltype[0] == "menu" and (ltype[1] != "Pipemenu" and 
+			                           ltype[1] != "Link"):
 				# move item/menu down into a menu
 				self.move_anything_anywhere2(model, ite, lower, skew="prepend")
 			else:
 				self.menu.interchangeX(menu, n, n+1)
 				model.move_after(ite,lower)
+				path = model.get_path(ite)
+				self.treeview.set_cursor(path)
 				self._sth_changed(True)
 		elif n == m_len - 1 and menu is not None and menu != "":
 			# move item/menu out of menu and down
@@ -657,7 +663,8 @@ class App:
 			else:
 				parent2 = model.iter_parent(parent)
 				n2 = model.get_path(parent)[-1]
-			self.move_anything_anywhere2(model, ite, parent2, n2, parent, "after")
+			self.move_anything_anywhere2(model, ite, parent2, n2, parent,
+			                             "after")
 	
 	# remove button clicked
 	def remove(self, param):
@@ -695,43 +702,47 @@ class App:
 			self.menu_path = sys.argv[1]
 		elif len(sys.argv) == 1:
 			self.menu_path = os.getenv("HOME") + "/.config/openbox/menu.xml"
-			if not os.path.isfile("%s/.config/openbox/menu.xml" % (os.getenv("HOME"))):
+			if not os.path.isfile("%s/.config/openbox/menu.xml" %
+			                      (os.getenv("HOME"))):
 				if not os.path.isdir("%s/.config/" % (os.getenv("HOME"))):
 					try:
 						os.mkdir("%s/.config/" % (os.getenv("HOME")))
 					except:
-						print "Error: Can't create ~/.config directory!"
+						print("Error: Can't create ~/.config directory!")
 						return
 
-				if not os.path.isdir("%s/.config/openbox" % (os.getenv("HOME"))):
+				if not os.path.isdir("%s/.config/openbox" %
+				                     (os.getenv("HOME"))):
 					try:
 						os.mkdir("%s/.config/openbox" % (os.getenv("HOME")))
 					except:
-						print "Error: Can't create ~/.config/openbox directory!"
+						print("Error: Can't create " +
+						      "~/.config/openbox directory!")
 						return
 
 				if not os.path.isfile("/etc/xdg/openbox/menu.xml"):
-					print "Error: Couldn't find default menu file!"
+					print("Error: Couldn't find default menu file!")
 					return
 
 				try:
 					orig = open("/etc/xdg/openbox/menu.xml", "r")
-					dest = open("%s/.config/openbox/menu.xml" % (os.getenv("HOME")), "w")
+					dest = open("%s/.config/openbox/menu.xml" %
+					            (os.getenv("HOME")), "w")
 					dest.write(orig.read())
 					orig.close()
 					dest.close()
 				except:
-					print "Error: Couldn't create default menu file!"
+					print("Error: Couldn't create default menu file!")
 					return
 
 		else:
-			print "Error: Wrong number of arguments"
-			print "Usage: obmenux /path/to/menu.xml"
-			print "\tOr just obmenux, to edit the default file"
+			print("Error: Wrong number of arguments")
+			print("Usage: obmenux /path/to/menu.xml")
+			print("\tOr just obmenux, to edit the default file")
 			return
 			
 		if not os.path.isfile(self.menu_path):
-			print "Error: \"%s\" not found" % self.menu_path
+			print("Error: \"%s\" not found" % self.menu_path)
 			return
 		
 		self.unsaved_menu = False
@@ -755,8 +766,8 @@ class App:
 		elif os.path.isfile("/usr/" + gladepath):
 			self.gladefile = "/usr/" + gladepath
 		else:
-			print "ERROR: "+gladename+" not found!"
-			print "       check that everything was installed all right"
+			print("ERROR: "+gladename+" not found!")
+			print("       check that everything was installed all right")
 			sys.exit(1)
 		
 		# Set the basics for GTK
@@ -770,16 +781,16 @@ class App:
 		self.action_entry = self.arbol.get_widget("combobox1")
 		self.execute_entry = self.arbol.get_widget("entry2")
 		self.execute_srch = self.arbol.get_widget("button1")
-		self.id_entry = self.arbol.get_widget("entry3")
-		
+		self.id_entry = self.arbol.get_widget("entry3")		
 
 		# treemodel.iter(label, type, [action], [execute], parent, [menu-id])
 		self.treemodel=gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
-				gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+		                             gobject.TYPE_STRING, gobject.TYPE_STRING,
+		                             gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.treeview.set_model(self.treemodel)
 		
 		# Signals
-		self.arbol.signal_autoconnect ({
+		self.arbol.signal_autoconnect({
 			"new_clicked": self.new,
 			"open_clicked": self.open,
 			"save_clicked": self.save,
