@@ -11,14 +11,14 @@ It builds a menu from a directory, alphabetically sorted. Example:
 
 obmx-moz
 =======
-usage: obmx-moz [options]
+Usage: obmx-moz [options]
 
-options:
+Options:
   -h, --help            show this help message and exit
   -f, --firefox         Look for Firefox bookmarks
   -m, --mozilla         Look for Mozilla Suite bookmarks
   -b FILENAME, --bookmarks=FILENAME
-                        Especify the path to the bookmarks.html file
+                        Specify the path to the bookmarks.html file
   -r ROOT, --root=ROOT  Root folder of the bookmarks
   -n BROWSER, --navigator=BROWSER
                         Command to run the web browser.

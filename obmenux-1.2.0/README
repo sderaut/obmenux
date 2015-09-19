@@ -1,5 +1,5 @@
 ==========
-obmenux 1.1.26
+obmenux 1.2.0
 ==========
 
 obmenux is an Openbox menu editor, written in Python, based on obmenu.
@@ -21,43 +21,50 @@ INSTALLATION:
   or, to install without installing the pipe menu commands:
     sudo python2 minisetup.py install
     
-  That script will show you what it did. Then it should be installed if nothing
-  has gone wrong.
+  The setup script will show you what it did. Then obmenux should be installed.
 
 USE:
   
-  Run it using:
+  Open the editor window by entering:
     obmenux
-  from any command line if it's installed.
+  on any command line if obmenux is installed.
   
   (Whether or not it is installed, you may run it when the current directory is
-  the version folder.)
+  the obmenux version folder.)
   
   If your openbox menu for a session isn't named menu.xml, specify the file:
-    obmenux .config/openbox/session-menu-name.xml
+    obmenux $HOME/.config/openbox/session-menu-name.xml
   
 Pipemenu use:
   
   To make an automatically filled menu choose "Add" click on "Pipemenu" and
-  enter the parameters for four different kinds of piped menus, as follows:
+  enter a command for one of four different kinds of pipe menus included
+  with obmenux, as follows:
 
   obmx-dir <directory> <application to open files in the directory>
 
   obmx-nav <starting directory for menu> <file manager> <terminal emulator>
 
-  obmx-moz -b <bookmarks file> -n <web browser>
+  obmx-moz -b "<bookmarks file>" -n "<web browser>"
 
   obmx-xdg <Gnome .menu format file>
       (If your system has any .menu files, they may be in /etc/xdg/menus)
+
+  < > in those definitions means substitute a filename, command name, or path.
+  The quotes may be omitted if there are no spaces in the name or path.
 
   The paths to files or directories should be written relative to your home
   directory or starting with "/" for root.
   
   If you get any errors or empty menus, try running those commands in a
-  terminal to see whether they produce much <XML> as they should, or error
+  terminal to see whether they produce as much <XML> as they should, or error
   messages.
 
-  There are some additional notes in the included file "pipes-help".
+  There are additional options for those pipe menu scripts documented in the
+  file "pipes-help" in this folder.
+  
+  Many other Openbox pipe menus are available.
+  See http://openbox.org/wiki/Openbox:Pipemenus
 
 Details about how installation works:
 
@@ -97,6 +104,21 @@ Details about how installation works:
   
 CHANGELOG:
 
+- 1.2.0 new feature: separator labels shown and editable (including potentially
+      by scripts using the obxmlx module, so the addition of that feature is
+      technically sufficient reason for incrementing the semantic version)
+    - Openbox 3.4 to 3.6, Lubuntu, and LXDE compatibility, by <command> tag
+      contents being shown and editable, and <command> tags replacing
+      the deprecated <execute> tags when editing their contents
+    - New Separator shortcut key changed to Shift-Ctrl-S, because Ctrl-S was
+      blocked by already being assigned to Save (a bug since obmenu 1.0)
+    - Delete key on keypad also recognized
+    - clicking on New Menu before selecting anything is fixed to make a new
+      menu as it should (and not make the menu displayed different from the one
+      that would be saved, which it turns out was a bug since obmenu 1.0)
+    - debugging messages reduced to show in terminal only on failures, and
+      other code clean-up
+
 - 1.1.26 looks and acts neat enough to be usable
            (keeps items visible when moving, when original obmenu 1.0 wouldn't,
             and opens menus when moving items into them, which obmenu can't,
@@ -134,7 +156,7 @@ CREDITS:
 	
 	very much based on and with thanks to
 	
-	Manuel Colmenero 2005-2006
+	Manuel Colmenero (c) 2005-2006 GPL2
 	
 	"Thanks to Mikael from the Openbox project, who gave me lots of ideas and
 	tested the program. And thanks to all the helpful guys in the openbox

@@ -1,6 +1,6 @@
 
 '''obxmlx.py component of
-   Openbox Menu Editor X 1.1.26  2015 by SDE
+   Openbox Menu Editor X 1.2.0  2015 by SDE
 
    based on
    Openbox Menu Editor 1.0 beta 
@@ -46,7 +46,6 @@ class ObMenux:
 				else:
 					b = self._get_dom_menu(menu, item)
 					if b: return b
-		return None #code-clean redundant
 
 	def _get_dom_ref(self, menu, parent):
 		''' given its ID, and its parent (or None for top-level)
@@ -60,7 +59,6 @@ class ObMenux:
 				else:
 					b = self._get_dom_menu(menu, item)
 					if b: return b
-		return None #code-clean redundant
 	
 	def _get_dom_item(self,menu,num):
 		''' Get an item of 'menu', given its number (order) '''
@@ -103,7 +101,8 @@ class ObMenux:
 		return i
 	
 	def _get_real_num(self,menu,num):
-		''' Get "real" item number (counting with comments, text, etc in the xml) '''
+		''' Get "real" item number (counting comments, text, etc. in the XML)
+		    Returns None when not 0-based index num not found '''
 		if menu is not None: #BUGFIX was `if menu`
 			item = self._get_dom_menu(menu)
 			if item is None: item = self.dom.documentElement #BUGFIX maybe
@@ -116,10 +115,6 @@ class ObMenux:
 				if i == num: return n
 				i += 1
 			n += 1
-		n = -1
-		#print("warning fake number " + str(n) + " for " +
-		#      str(menu) + " number " + str(num))
-		return n #BUGFIX was returning None from an expected fn -> int
 	
 	def _get_item_props(self,node):
 		''' get the properties of an item from the xml, and returns them as a
@@ -132,11 +127,15 @@ class ObMenux:
 				accion = it.attributes["name"].nodeValue
 				if accion.lower() == "execute":
 					for itm in it.childNodes:
-						if itm.nodeType == 1 and itm.nodeName.lower() == "execute":
+						if itm.nodeType == 1 and (itm.nodeName == "command"
+						                       or itm.nodeName == "execute"):
 							for item in itm.childNodes:
 								if item.nodeType == 3:
 									param = item.nodeValue.strip()
-		return { "type": "item", "label": etiqueta, "action": accion, "execute": param }
+									break # first found text is the one to use
+							break # use first found command or execute tag
+		return { "type": "item", "label": etiqueta, "action": accion,
+		         "execute": param }
 	
 	def _get_menu_props(self, node):
 		'''	get the properties of a menu from the xml, and returns them as a
@@ -159,6 +158,15 @@ class ObMenux:
 				act = "Link"
 		if node.hasAttribute("execute"): ex = node.attributes["execute"].nodeValue
 		return { "type": "menu", "label": lb, "action": act, "execute": ex, "id": mid }
+
+	def _get_sep_props(self,node):
+		''' get the properties of a separator from the xml, and returns them as
+		    a dictionary. '''
+		if node.hasAttribute("label"):
+			return { "type": "separator",
+			         "label": node.attributes["label"].nodeValue }
+		else:
+			return { "type": "separator" }
 
 	# Public functions ===================================================
 	# Most of them are self-explanatory
@@ -230,22 +238,25 @@ class ObMenux:
 			dom_mnu.parentNode.removeChild(dom_mnu)
 		dom_mnu.unlink()
 	
-	def createSep(self, menu, pos=None):
+	def createSep(self, menu, pos=None, label=None):
 		''' creates a Separator element in menu (by ID) at pos (0-based index) '''		
 		nodo = self.dom.createElement("separator")
+		if label is not None:
+			nodo.setAttribute("label", label)
 		self._put_dom_item(menu, nodo, pos)
 			
 	def createItem(self, menu, label, action, execute, pos=None):
 		''' Creates an item tag in menu (by ID) at pos (0-based index).
-		    String execute is inserted into an execute tag.
-		    The name attribute of the item tag is set to "Execute".
 		    String label is assigned to the label attribute of the item tag.
-		    The action argument is ignored. '''
+		    An action tag is inserted and its name is set to "Execute".
+		    The action argument is ignored.
+		    String execute is inserted into a command tag. (Literal execute tags
+		    are deprecated, though still recognized by obmenux.) '''
 		nodo = self.dom.createElement("item")
 		nodo.attributes["label"] = label
 		accion = self.dom.createElement("action")
 		accion.attributes["name"] = "Execute"
-		exe = self.dom.createElement("execute")
+		exe = self.dom.createElement("command")
 		txt = self.dom.createTextNode("")
 		txt.nodeValue = execute
 		exe.appendChild(txt)
@@ -284,28 +295,10 @@ class ObMenux:
 		self._put_dom_item(menu, nodo, pos)
 		
 	def interchange(self, menu, n1, n2):
-		''' within menu (by ID) interchanges nodes n1 and n2
+		''' within menu (by ID) swaps nodes n1 and n2
 		    where n1 and n2 are integers representing tags in the menu
 		    by a 0-based count (not all DOM nodes in the menu)
-		    [assigns to read-only lists, but somehow works anyway] '''
-		if menu is None: #BUGFIX was `if not menu`
-			dom_mnu = self.dom.documentElement
-		else:
-			dom_mnu = self._get_dom_menu(menu)
-			if dom_mnu is None:
-				dom_mnu = self.dom.documentElement #BUGFIX maybe
-		i1 = self._get_real_num(menu, n1)
-		i2 = self._get_real_num(menu, n2)
-		if i1 is None or i2 is None: #safety against a crash when failing
-			i1 = n1; i2 = n2; # print("Warning: real numbers not provided")
-		uno = dom_mnu.childNodes[i1]
-		dom_mnu.childNodes[i1] = dom_mnu.childNodes[i2]
-		dom_mnu.childNodes[i2] = uno
-		
-	def interchangeX(self, menu, n1, n2): # rewrite, seems to work
-		''' within menu (by ID) interchanges nodes n1 and n2
-		    where n1 and n2 are integers representing tags in the menu
-		    by a 0-based count (not all DOM nodes in the menu) '''
+		    True when successful '''
 		if menu is None:
 			dom_mnu = self.dom.documentElement
 		else:
@@ -314,17 +307,21 @@ class ObMenux:
 				dom_mnu = self.dom.documentElement
 		i1 = self._get_real_num(menu, n1)
 		i2 = self._get_real_num(menu, n2)
+		if i1 is None or i2 is None:
+			return False
 		tmp1 = dom_mnu.childNodes[i1].cloneNode(deep=True)
 		tmp2 = dom_mnu.childNodes[i2].cloneNode(deep=True)
 		dom_mnu.replaceChild(tmp2, dom_mnu.childNodes[i1])
 		dom_mnu.replaceChild(tmp1, dom_mnu.childNodes[i2])
+		return True
 			
 	def jumpMove(self, src_menu, n1, dest_menu, n2): # new feature
 		''' moves item or menu from source menu n1
 		    to before destination menu n2
 		    where n1 and n2 are integers representing tags in the menu
 		    by a 0-based count before moving the item or menu,
-		    (appends when n2 > 0-based count of tags in destination) '''
+		    (appends when n2 > 0-based count of tags in destination)
+		    True when successful '''
 		if src_menu is None:
 			dom_mnu1 = self.dom.documentElement
 		else:
@@ -338,48 +335,64 @@ class ObMenux:
 			if dom_mnu2 is None:
 				dom_mnu2 = self.dom.documentElement
 		i1 = self._get_real_num(src_menu, n1)
+		if i1 is None:
+			return False
 		tmp = dom_mnu1.childNodes[i1].cloneNode(deep=True)
 		dum = dom_mnu1.removeChild(dom_mnu1.childNodes[i1])
 		dum.unlink() # should be unlinked if not used according to docs
 		if src_menu == dest_menu and n1 < n2:
 		    n2 -= 1
 		i2 = self._get_real_num(dest_menu, n2)
-		if i2 == -1:
-			# print("trying insertBefore None to append")
-			dom_mnu2.insertBefore(tmp, None) # appendChild does other actions
+		if i2 is None:
+			dom_mnu2.insertBefore(tmp, None)
 		else:
 			dom_mnu2.insertBefore(tmp, dom_mnu2.childNodes[i2])
-	
+		return True
+
 	def setItemProps(self, menu, n, label, action, exe):
 		''' at position n (0-based DOM count) of menu (by ID)
 		    sets the string label attribute and string action name, and
 		    when action name is "Execute",
-		        sets the item to have at least one
-		        execute tag containing string exe (and all execute tags present
-		            will be set to contain string exe)
+		        sets the item to have at least one command or execute tag
+		        containing string exe (preferring command, as execute tag is
+		        deprecated, and preferring the first matching tag found)
 		    when action is anything else,
-		        removes all other contents of the item '''
+		        removes all command or execute tags from the item '''
 		itm = self._get_dom_item(menu,n)
 		itm.attributes["label"].nodeValue = label
 		for it in itm.childNodes:
 			if it.nodeType == 1:
 				it.attributes["name"].nodeValue = action
-				if action == "Execute":
-					if not it.childNodes:
-						elm = xml.dom.minidom.Element("execute")
-						txt = xml.dom.minidom.Text()
-						txt.nodeValue = exe
-						elm.appendChild(txt)
-						it.appendChild(elm)
-					else:
+				if action.lower() == "execute": # action may be "[E|e]xecute"
+					exe_used = False
+					if it.childNodes is not None:
 						for i in it.childNodes:
-							if i.nodeType == 1 and i.nodeName == "execute":
+							if i.nodeType == 1 and (i.nodeName == "execute" or
+							                        i.nodeName == "command"):
 								for item in i.childNodes:
 									if item.nodeType == 3:
 										item.nodeValue = exe
+										exe_used = True
+										break
+								if not exe_used:
+									txt = xml.dom.mindom.Text()
+									txt.nodeValue = exe
+									exe_used = True
+									i.appendChild(txt)
+								break
+					if not exe_used:
+						elm = xml.dom.minidom.Element("command")
+						txt = xml.dom.minidom.Text()
+						txt.nodeValue = exe
+						exe_used = True
+						elm.appendChild(txt)
+						it.appendChild(elm)
 				else:
 					for item in it.childNodes:
-						it.removeChild(item)
+						if item.nodeType == 1 and (item.nodeName == "execute" or
+						                           item.nodeName == "command"):
+							it.removeChild(item)
+							item.unlink()
 	
 	def setMenuLabel(self, menu, label):
 		''' sets the label attribute of menu (by ID) to string label '''
@@ -406,8 +419,18 @@ class ObMenux:
 		if prnt: mnu = self._get_dom_ref(mid, prnt)
 		if mnu: mnu.setAttribute("id", new_id)
 	
+	def setSepLabel(self, menu, num, label=None):
+		''' sets the label attribute of a separator
+		    pass None to remove label attribute '''
+		nodo = self._get_dom_item(menu, num)
+		if label is None:
+			if nodo.hasAttribute("label"):
+				nodo.removeAttribute("label")
+		else:
+			nodo.setAttribute("label", label)
+	
 	def setMenuExecute(self, parent, mid, execute):
-		''' sets the execute attribute (attribute not execute tag)
+		''' sets the execute attribute (the attribute NOT the execute tag)
 		    of the menu mid (by ID within the parent menu tree) '''
 		prnt = self._get_dom_menu(parent)
 		if prnt: mnu = self._get_dom_ref(mid, prnt)
@@ -424,7 +447,7 @@ class ObMenux:
 					if i.nodeName == "menu":
 						return self._get_menu_props(i)
 					elif i.nodeName == "separator":
-						return { "type": "separator" }
+						return self._get_sep_props(i)
 					elif i.nodeName == "item":
 						return self._get_item_props(i) #BUGFIX was missing _
 				n += 1
@@ -451,14 +474,12 @@ class ObMenux:
 			if i.nodeType == 1:
 				if i.nodeName == "menu":
 					d = self._get_menu_props(i)
-					d["parent"] = menu
-					lst.append(d)
 				elif i.nodeName == "separator":
-					lst.append({"type": "separator", "parent": menu})
+					d = self._get_sep_props(i)
 				elif i.nodeName == "item":
 					d = self._get_item_props(i)
-					d["parent"] = menu		
-					lst.append(d)
+				d["parent"] = menu		
+				lst.append(d)
 		return lst
 
 	def getMenuRecursive(self, menuid):

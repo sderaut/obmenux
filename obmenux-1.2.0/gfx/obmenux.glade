@@ -191,7 +191,7 @@
 		      <property name="label" translatable="yes">Separator</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="separator_clicked" last_modification_time="Thu, 15 Dec 2005 12:31:32 GMT"/>
-		      <accelerator key="s" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+		      <accelerator key="s" modifiers="GDK_CONTROL_MASK | GDK_SHIFT_MASK" signal="activate"/>
 		    </widget>
 		  </child>
 
@@ -730,13 +730,13 @@ Exit</property>
   <property name="visible">False</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">Openbox Menu Editor X</property>
-  <property name="comments" translatable="yes">version 1.1.26  2015 SDE
+  <property name="comments" translatable="yes">version 1.2.0  2015 SDE
  Thank you for using this software.
  Please report any issues with obmenux at
  https://github.com/sderaut/obmenux</property>
  <!-- feedback on original obmenu was to m.kolme@gmail.com -->
   <property name="license" translatable="yes">    obmenux: Openbox Menu Editor X
-    version 1.1.26  2015 SDE
+    version 1.2.0  2015 SDE
     
     based on obmenu 1.0 by Manuel Colmenero
     http://obmenu.sourceforge.net/index.html
