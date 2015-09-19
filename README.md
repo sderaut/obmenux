@@ -1,9 +1,9 @@
 # obmenux : the Openbox Menu Editor X version
 an experimental version of obmenu Openbox menu editors
 
-Additional features to obmenu 1.0:
-    Openbox 3.6 compatible for editing commands
-    edits separator labels
+Additional features to obmenu 1.0:  
+    Openbox 3.6 compatible for editing commands  
+    edits separator labels  
     moves items and menus in and out of menus, with no damage to XML contents
 
 The point of this fork was to add the additional feature of moving items and menus freely between menus, and maybe other features, and to combine that with bugfixes from other versions of obmenu, and more bugfixes. So this version will be available here for downloading as an alternative to downloading another obmenu version and applying patches manually each time a functioning version of obmenu is wanted when setting up a desktop that uses Openbox. (Openbox can be used as a desktop environment by itself or as the window manager for LXDE or Lubuntu.)
