@@ -1,5 +1,5 @@
 ==========
-obmenux 1.2.0
+obmenux 1.2.1
 ==========
 
 obmenux is an Openbox menu editor, written in Python, based on obmenu.
@@ -103,6 +103,8 @@ Details about how installation works:
   any other program, that would be an issue to report.
   
 CHANGELOG:
+
+- 1.2.1 fixed bug in 1.2.0 that prevented making a New Menu in a New file
 
 - 1.2.0 new feature: separator labels shown and editable (including potentially
       by scripts using the obxmlx module, so the addition of that feature is

@@ -1,6 +1,6 @@
 
 '''obxmlx.py component of
-   Openbox Menu Editor X 1.2.0  2015 by SDE
+   Openbox Menu Editor X 1.2.1  2015 by SDE
 
    based on
    Openbox Menu Editor 1.0 beta 
