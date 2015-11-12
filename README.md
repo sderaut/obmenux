@@ -1,10 +1,19 @@
 # obmenux : the Openbox Menu Editor X version
 an experimental version of obmenu Openbox menu editors
 
-Additional features to obmenu 1.0:  
-   + Openbox 3.6 compatible for editing commands  
+Features obmenux 1.3 has that obmenu 1.0 lacks:  
+   + icon support (shows icons, allows setting icons, browse with preview)
+   + helpful messages in case of any file errors, instead of crashing
    + edits separator labels  
-   + moves items and menus in and out of menus, with no damage to XML contents
+   + moves items and menus in and out of menus (without rewriting them)
+   + any arrangement of menus and their ids can be viewed and edited, even
+     invalid arrangements that would hide menus and links from showing up, so
+     that broken menus can be fixed, and menus with circular references won't
+     crash the menu editor
+   + Openbox 3.6 compatible for editing command tags
+     (sorry, obmenux still has no support for action tags other than
+     command or execute, such as tags that set startup notification and
+     window locations)
 
 The point of this fork was to add the additional feature of moving items and menus freely between menus, and maybe other features, and to combine that with bugfixes from other versions of obmenu, and more bugfixes. So this version will be available here for downloading as an alternative to downloading another obmenu version and applying patches manually each time a functioning version of obmenu is wanted when setting up a desktop that uses Openbox. (Openbox can be used as a desktop environment by itself or as the window manager for LXDE or Lubuntu.)
 

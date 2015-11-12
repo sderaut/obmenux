@@ -1,6 +1,6 @@
-#!/usr/bin/env python2 -O
+#!/usr/bin/python2 -O
 #########################################################################
-#  obmx-xdg component of obmenux
+#  obmx-xdg component of obmenux 1.3
 #  version by SDE 2015
 #  based on obm-xdg
 #  Copyright 2005 Manuel Colmenero 
@@ -41,6 +41,7 @@ class XdgMenu:
 		self.lang = None
 		self.appdirs = []
 		self.items = []
+		self.items_filenames = [] # see _append_without_dup
 		self.onlyunallocated = False
 		self.deleted = False
 		self.filename = ""
@@ -329,6 +330,12 @@ class XdgMenu:
 		for item in self.children:
 			item._allocate_items(data)	
 	
+	# 2015 09 29, because there were so many duplicates
+	def _append_without_dup(self, items_dict, item):
+		if not item["exec"] in self.items_filenames:
+			self.items.append(item)
+			self.items_filenames.append(item["exec"])
+	
 	def _create_items(self, data):
 		if self.include:
 			for d in self.appdirs:
@@ -337,9 +344,9 @@ class XdgMenu:
 						if self.include.evaluate(item["categories"], item["filename"]):
 							if self.exclude:
 								if not self.exclude.evaluate(item["categories"], item["filename"]):
-									self.items.append(item)
+									self._append_without_dup(self.items, item)
 							else:
-								self.items.append(item)
+								self._append_without_dup(self.items, item)
 		for item in self.children:
 			item._create_items(data)
 			
@@ -486,22 +493,17 @@ if __name__ == "__main__":
 	else:
 		
 		caching = True
-		cachedir = "%s/.local/share/obmenux" % (home)
+		cachedir = "%s/.cache/obmenux" % (home)
 		if not os.path.isdir(cachedir):
-			if not os.path.isdir("%s/.local" % (home)):
+			if not os.path.isdir("%s/.cache" % (home)):
 				try:
-					os.mkdir("%s/.local" % (home))
-				except: # if there's no .local for the home and we can't make one,
-					caching = False # then we shouldn't be caching by file writing
-			if not os.path.isdir("%s/.local/share" % (home)):
-				try:
-					os.mkdir("%s/.local/share" % (home))
-				except: # if there's no share in .local and we can't make one,
+					os.mkdir("%s/.cache" % (home))
+				except: # if there's no .cache for the home and we can't make one,
 					caching = False # then we shouldn't be caching by file writing
 			if caching:
 				try:
 					os.mkdir(cachedir)
-				except: # if we don't have and can't make a dir in .local/share,
+				except: # if we don't have and can't make a dir in .cache,
 					caching = False # then we shouldn't be caching by file writing
 
 		if caching:

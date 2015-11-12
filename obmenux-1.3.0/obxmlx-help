@@ -1,5 +1,5 @@
 module obxmlx:
-version: 1.2
+version: 1.3
 class ObMenux:
  
  ObMenux.newMenu()
@@ -97,4 +97,9 @@ NOTE: It's necessary to call one of the above before doing anything else.
     replace all menu ID's in tree from parent matching old_id, with new_id
     leaving parent unset or None is recommended
 
+ --- obxmlx.py version 1.3 has new functions for accessing menus by numeric
+    path (a tuple) instead of by the id attribute.
+    The old functions that access menus by id should not be used for invalid
+    menu files (files where some menu other than an intentional link does not
+    have a unique id.)
 

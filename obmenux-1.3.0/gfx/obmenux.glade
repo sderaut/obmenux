@@ -10,7 +10,7 @@
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
   <property name="default_width">560</property>
-  <property name="default_height">500</property>
+  <property name="default_height">529</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="icon_name"></property>
@@ -583,6 +583,35 @@
 	      </child>
 
 	      <child>
+		<widget class="GtkLabel" id="label5">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Icon</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">4</property>
+		  <property name="bottom_attach">5</property>
+		  <property name="x_padding">4</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
 		<widget class="GtkEntry" id="entry1">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
@@ -689,7 +718,7 @@ Exit</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
-		      <signal name="clicked" handler="search_clicked" last_modification_time="Fri, 16 Dec 2005 13:37:36 GMT"/>
+		      <signal name="clicked" handler="exe_search_clicked" last_modification_time="Fri, 16 Dec 2005 13:37:36 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -708,6 +737,63 @@ Exit</property>
 		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
+
+	      <child>
+		<widget class="GtkHBox" id="hbox2">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkEntry" id="entry4">
+		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">True</property>
+		      <property name="visibility">True</property>
+		      <property name="max_length">0</property>
+		      <property name="text" translatable="yes"></property>
+		      <property name="has_frame">True</property>
+		      <property name="invisible_char">*</property>
+		      <property name="activates_default">False</property>
+		      <signal name="changed" handler="icon_changed" last_modification_time="Wed, 09 Nov 2005 14:43:38 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkButton" id="button2">
+		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">...</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="ico_search_clicked" last_modification_time="Fri, 16 Dec 2005 13:37:36 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">2</property>
+		  <property name="top_attach">4</property>
+		  <property name="bottom_attach">5</property>
+		  <property name="x_padding">4</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options">fill</property>
+		</packing>
+	      </child>
+
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -730,13 +816,13 @@ Exit</property>
   <property name="visible">False</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">Openbox Menu Editor X</property>
-  <property name="comments" translatable="yes">version 1.2.1  2015 SDE
+  <property name="comments" translatable="yes">version 1.3.0  2015 SDE
  Thank you for using this software.
  Please report any issues with obmenux at
  https://github.com/sderaut/obmenux</property>
  <!-- feedback on original obmenu was to m.kolme@gmail.com -->
   <property name="license" translatable="yes">    obmenux: Openbox Menu Editor X
-    version 1.2.1  2015 SDE
+    version 1.3.0  2015 SDE
     
     based on obmenu 1.0 by Manuel Colmenero
     http://obmenu.sourceforge.net/index.html

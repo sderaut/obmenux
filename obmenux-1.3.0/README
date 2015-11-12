@@ -1,5 +1,5 @@
 ==========
-obmenux 1.2.1
+obmenux 1.3.0
 ==========
 
 obmenux is an Openbox menu editor, written in Python, based on obmenu.
@@ -96,7 +96,7 @@ Details about how installation works:
     /usr/local/bin/obmx-nav    -- makes a menu to navigate directories
     /usr/local/bin/obmx-moz    -- makes a menu from a bookmarks.html file
     /usr/local/bin/obmx-xdg    -- makes a menu from a Gnome .menu file
-    $HOME/.local/share/obmenux -- where some pipe menus cache results for speed
+    $HOME/.cache/obmenux -- where some pipe menus cache results for speed
 
   The installation should allow continuing to use other versions of obmenu that
   are not named obmenux. If obmenux has errors or causes any interference with
@@ -104,7 +104,20 @@ Details about how installation works:
   
 CHANGELOG:
 
-- 1.2.1 fixed bug in 1.2.0 that prevented making a New Menu in a New file
+- 1.3.0 new features:
+    - icon support (shows icons, allows setting icons, including by file
+      browser with preview)
+    - helpful messages in case of any file errors, instead of crashing
+    - cache files for the pipe-menu scripts are placed in $HOME/.cache
+      (instead of directly in $HOME or in $HOME/.local/share) making it
+      obvious that they are cache files that can be deleted harmlessly
+    - any arrangement of menus and their ids can be viewed and edited, even
+      invalid arrangements that would hide menus and links from showing up, so
+      that broken menus can be fixed, and menus with circular references won't
+      crash the menu editor
+    - (sorry, obmenux still has no support for action tags other than
+      <command> or <execute>, such as tags that set startup notification and
+      window locations)
 
 - 1.2.0 new feature: separator labels shown and editable (including potentially
       by scripts using the obxmlx module, so the addition of that feature is

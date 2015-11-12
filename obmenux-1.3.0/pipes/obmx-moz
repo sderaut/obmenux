@@ -1,6 +1,6 @@
 #!/usr/bin/env python2 -O
 #########################################################################
-#  obmx-moz component of obmenux
+#  obmx-moz component of obmenux 1.3
 #  version by SDE 2015
 #  based on obm-moz
 #  Copyright 2005 Manuel Colmenero 
@@ -172,22 +172,17 @@ if __name__ == "__main__":
 				sys.exit(1)
 	
 	caching = True
-	cachedir = "%s/.local/share/obmenux" % (home)
+	cachedir = "%s/.cache/obmenux" % (home)
 	if not os.path.isdir(cachedir):
-		if not os.path.isdir("%s/.local" % (home)):
+		if not os.path.isdir("%s/.cache" % (home)):
 			try:
-				os.mkdir("%s/.local" % (home))
-			except: # if there's no .local for the home and we can't make one,
-				caching = False # then we shouldn't be caching by file writing
-		if not os.path.isdir("%s/.local/share" % (home)):
-			try:
-				os.mkdir("%s/.local/share" % (home))
-			except: # if there's no share in .local and we can't make one,
+				os.mkdir("%s/.cache" % (home))
+			except: # if there's no .cache for the home and we can't make one,
 				caching = False # then we shouldn't be caching by file writing
 		if caching:
 			try:
 				os.mkdir(cachedir)
-			except: # if we don't have and can't make a dir in .local/share,
+			except: # if we don't have and can't make a dir in .cache,
 				caching = False # then we shouldn't be caching by file writing
 	
 	if caching:
